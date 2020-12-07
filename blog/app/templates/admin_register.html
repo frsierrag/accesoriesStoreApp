@@ -1,0 +1,75 @@
+<!-- 
+* Copyright 2018 Carlos Eduardo Alfaro Orellana
+  https://www.youtube.com/c/CarlosAlfaro007
+-->
+{% extends 'base_admin.html' %}
+
+
+{% block body %}	
+
+		<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+			<div class="mdl-tabs__tab-bar">
+				<a href="#tabNewAdmin" class="mdl-tabs__tab is-active">Registrar</a>
+				
+			</div>
+			<div class="mdl-tabs__panel is-active" id="tabNewAdmin">
+				<div class="mdl-grid">
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="full-width panel mdl-shadow--2dp">
+							<div class="full-width panel-tittle bg-primary text-center tittles">
+								Nuevo usuario
+							</div>
+							<div class="full-width panel-content">
+								<form>
+									<div class="mdl-grid">
+										<div class="mdl-cell mdl-cell--12-col">
+									        <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; DATOS DEL USUARIO</legend><br>
+									    </div>
+									    
+									    <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+												<input class="mdl-textfield__input" type="text" pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ]*(\.[0-9]+)?" id="UserNameAdmin">
+												<label class="mdl-textfield__label" for="UserNameAdmin">User Name</label>
+												<span class="mdl-textfield__error">Invalid user name</span>
+											</div>
+										</div>
+										
+										
+										<div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+												<input class="mdl-textfield__input" type="email" id="emailAdmin">
+												<label class="mdl-textfield__label" for="emailAdmin">E-mail</label>
+												<span class="mdl-textfield__error">Invalido E-mail</span>
+											</div>
+										</div>
+
+										<div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+												<input class="mdl-textfield__input" type="password" id="passwordAdmin">
+												<label class="mdl-textfield__label" for="passwordAdmin">Password</label>
+												<span class="mdl-textfield__error">Invalid password</span>
+											</div>
+										</div>
+
+
+										
+										
+										
+									</div>
+									<p class="text-center">
+										<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary" id="btn-addAdmin">
+											<i class="zmdi zmdi-plus"></i>
+										</button>
+										<div class="mdl-tooltip" for="btn-addAdmin">Adicionar Usuario</div>
+									</p>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+		</div>
+	</section>
+{% endblock %}
