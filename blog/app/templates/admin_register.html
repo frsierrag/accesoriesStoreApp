@@ -4,7 +4,6 @@
 -->
 {% extends 'base_admin.html' %}
 
-
 {% block body %}	
 
 		<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
@@ -20,21 +19,31 @@
 								Nuevo usuario
 							</div>
 							<div class="full-width panel-content">
-								<form>
+								<form action="" method="post" novalidate>
+									{{ form.hidden_tag() }}
 									<div class="mdl-grid">
 										<div class="mdl-cell mdl-cell--12-col">
 									        <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; DATOS DEL USUARIO</legend><br>
 									    </div>
-									    
-									    <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+																				
+										<div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+												{{ form.nombre.label(class="mdl-textfield__label") }}
+												{{ form.nombre(class="mdl-textfield__input")}}
+												{% for error in form.nombre.errors %}
+													<span class="mdl-textfield__error">[{{ error }}]</span>
+												{% endfor %}
+											</div>
+										</div>
+
+									    <!-- <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
 											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 												<input class="mdl-textfield__input" type="text" pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ]*(\.[0-9]+)?" id="UserNameAdmin">
 												<label class="mdl-textfield__label" for="UserNameAdmin">User Name</label>
 												<span class="mdl-textfield__error">Invalid user name</span>
 											</div>
-										</div>
-										
-										
+										</div> -->
+
 										<div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
 											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 												<input class="mdl-textfield__input" type="email" id="emailAdmin">
@@ -51,10 +60,6 @@
 											</div>
 										</div>
 
-
-										
-										
-										
 									</div>
 									<p class="text-center">
 										<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary" id="btn-addAdmin">
@@ -62,6 +67,26 @@
 										</button>
 										<div class="mdl-tooltip" for="btn-addAdmin">Adicionar Usuario</div>
 									</p>
+
+
+									
+									<!-- <p>
+										{{ form.contraseña.label }}<br>
+										{{ form.contraseña(size=30) }}<br>
+										{% for error in form.contraseña.errors %}
+										<span style="color:red;">[{{ error }}]</span>
+										{% endfor %}
+									</p>
+									<p>
+										{{ form.email.label }}<br>
+										{{ form.email(size=30) }}<br>
+										{% for error in form.email.errors %}
+										<span style="color:red;">[{{ error }}]</span>
+										{% endfor %}
+									</p>
+									<p>{{ form.enviar() }}</p> -->
+
+
 								</form>
 							</div>
 						</div>
