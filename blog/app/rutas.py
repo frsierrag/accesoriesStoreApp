@@ -25,7 +25,7 @@ def admin_register():
     form = FormRegister()
     if(form.validate_on_submit()):
         return redirect(url_for('home_admin'))
-    return render_template('admin_register.html')
+    return render_template('admin_register.html', form=form)
 
 @app.route('/home_admin')
 def home_admin():
@@ -45,14 +45,6 @@ def products_admin():
 @app.route('/products_user')
 def products_user():
     return render_template('/products_user.html')
-
-@app.route('/login2',methods=['GET', 'POST'])
-def login2():
-  form = FormInicio()
-  if(form.validate_on_submit()):
-    flash('Inicio de sesión solicitado por el usuario {}, recordar={}'.format(form.nombre.data, form.recordar.data))
-    return redirect(url_for('home_admin'))
-  return render_template('iniciar_sesion.html', form=form)
 
 @app.route('/update_admin')
 def update_admin():
