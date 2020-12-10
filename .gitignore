@@ -1,9 +1,7 @@
 # created by virtualenv automatically
+
 /Lib
 /Scripts
-# /blog/__pycache__
-# /blog/app/__pycache__
-# /blog/app/settings/__pycache__
 *.pyc
 .flaskenv
 *.cfg

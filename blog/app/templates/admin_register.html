@@ -24,69 +24,41 @@
 									<div class="mdl-grid">
 										<div class="mdl-cell mdl-cell--12-col">
 									        <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp; DATOS DEL USUARIO</legend><br>
-									    </div>
-																				
+									    </div>																				
 										<div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
 											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-												{{ form.nombre.label(class="mdl-textfield__label") }}
-												{{ form.nombre(class="mdl-textfield__input")}}
-												{% for error in form.nombre.errors %}
+												{{ form.userName.label(class="mdl-textfield__label") }}
+												{{ form.userName(class="mdl-textfield__input")}}
+												{% for error in form.userName.errors %}
 													<span class="mdl-textfield__error">[{{ error }}]</span>
 												{% endfor %}
 											</div>
 										</div>
-
-									    <!-- <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-												<input class="mdl-textfield__input" type="text" pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ]*(\.[0-9]+)?" id="UserNameAdmin">
-												<label class="mdl-textfield__label" for="UserNameAdmin">User Name</label>
-												<span class="mdl-textfield__error">Invalid user name</span>
-											</div>
-										</div> -->
-
 										<div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
 											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-												<input class="mdl-textfield__input" type="email" id="emailAdmin">
-												<label class="mdl-textfield__label" for="emailAdmin">E-mail</label>
-												<span class="mdl-textfield__error">Invalido E-mail</span>
+												{{ form.email.label(class="mdl-textfield__label") }}
+												{{ form.email(class="mdl-textfield__input")}}
+												{% for error in form.email.errors %}
+													<span class="mdl-textfield__error">[{{ error }}]</span>
+												{% endfor %}
 											</div>
 										</div>
-
-										<div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+										<div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
 											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-												<input class="mdl-textfield__input" type="password" id="passwordAdmin">
-												<label class="mdl-textfield__label" for="passwordAdmin">Password</label>
-												<span class="mdl-textfield__error">Invalid password</span>
+												{{ form.password.label(class="mdl-textfield__label") }}
+												{{ form.password(class="mdl-textfield__input")}}
+												{% for error in form.password.errors %}
+													<span class="mdl-textfield__error">[{{ error }}]</span>
+												{% endfor %}
 											</div>
 										</div>
-
 									</div>
 									<p class="text-center">
-										<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary" id="btn-addAdmin">
-											<i class="zmdi zmdi-plus"></i>
+										<button id="btn-addAdmin" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary">
+											{{ form.submit(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary") }}
 										</button>
 										<div class="mdl-tooltip" for="btn-addAdmin">Adicionar Usuario</div>
 									</p>
-
-
-									
-									<!-- <p>
-										{{ form.contraseña.label }}<br>
-										{{ form.contraseña(size=30) }}<br>
-										{% for error in form.contraseña.errors %}
-										<span style="color:red;">[{{ error }}]</span>
-										{% endfor %}
-									</p>
-									<p>
-										{{ form.email.label }}<br>
-										{{ form.email(size=30) }}<br>
-										{% for error in form.email.errors %}
-										<span style="color:red;">[{{ error }}]</span>
-										{% endfor %}
-									</p>
-									<p>{{ form.enviar() }}</p> -->
-
-
 								</form>
 							</div>
 						</div>

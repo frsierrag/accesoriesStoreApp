@@ -30,53 +30,81 @@
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="number"
-                                            pattern="-?[0-9- ]*(\.[0-9]+)?" id="BarCode">
+                                            pattern="-?[0-9- ]*(\.[0-9]+)?" id="BarCode" disabled>
                                         <label class="mdl-textfield__label" for="BarCode">Referencia</label>
                                         <span class="mdl-textfield__error">Invalida referencia</span>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        {{ form.productName.label(class="mdl-textfield__label") }}
+                                        {{ form.productName(class="mdl-textfield__input")}}
+                                        {% for error in form.productName.errors %}
+                                            <span class="mdl-textfield__error">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!-- <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="text"
                                             pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="NameProduct">
                                         <label class="mdl-textfield__label" for="NameProduct">Nombre</label>
                                         <span class="mdl-textfield__error">Invalido nombre</span>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        {{ form.quantity.label(class="mdl-textfield__label") }}
+                                        {{ form.quantity(class="mdl-textfield__input")}}
+                                        {% for error in form.quantity.errors %}
+                                            <span class="mdl-textfield__error">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!-- <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
                                             id="StrockProduct">
                                         <label class="mdl-textfield__label" for="StrockProduct">Cantidad</label>
                                         <span class="mdl-textfield__error">Invalida cantidad</span>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        {{ form.price.label(class="mdl-textfield__label") }}
+                                        {{ form.price(class="mdl-textfield__input")}}
+                                        {% for error in form.price.errors %}
+                                            <span class="mdl-textfield__error">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!-- <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="text" pattern="-?[0-9.]*(\.[0-9]+)?"
                                             id="PriceProduct">
-                                        <label class="mdl-textfield__label" for="PriceProduct">Precio      </label>
+                                        <label class="mdl-textfield__label" for="PriceProduct">Precio</label>
                                         <span class="mdl-textfield__error">Invalido precio</span>
                                     </div>
-                                </div>
-                                                           
-                                
+                                </div> -->
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
                                         AGREGAR IMAGEN DEL PRODUCTO</legend><br>
                                 </div>
-                                
                                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield">
-                                        <input type="file">
+                                        <!-- <input type="file"> -->
+                                        {{ form.image() }}
                                     </div>
                                 </div>
                             </div>
                             <p class="text-center">
-                                <button
+                                <!-- <button
                                     class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
                                     id="btn-addProduct">
                                     <i class="zmdi zmdi-plus"></i>
+                                </button> -->
+                                <button id="btn-addProduct" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary">
+                                    {{ form.submit(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary") }}
                                 </button>
                             <div class="mdl-tooltip" for="btn-addProduct">Agregar producto</div>
                             </p>
