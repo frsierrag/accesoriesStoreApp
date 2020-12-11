@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from app import app
 from flask import Flask, render_template, request, redirect, url_for, flash
 from app.formularios import FormLogin, FormRecover, FormRegister, FormCreate, FormUpdate, FormDelete, FormSearch, FormUpdateInventary
+from app.mocks import userValidate, listAccesories
 
 @app.route('/')
 @app.route('/index')
@@ -13,8 +14,13 @@ def index():
 def login():
     form = FormLogin()
     if(form.validate_on_submit()):
-        flash('Inicio de sesión solicitado por el usuario {}, recordar={}'.format(form.nombre.data, form.recordar.data))
-        return redirect(url_for('home_admin'))
+        user = userValidate(request.form["userName"], request.form["password"])
+        print(user + " " + request.form["userName"] + " " + request.form["password"])
+        if user != "1" or user != "2":            
+            flash('Inicio de sesión solicitado por el usuario {}, recordar={}'.format(form.userName.data, form.remember.data))
+            return redirect(url_for('home_admin'))
+        else:
+            return redirect(url_for('login'))
     return render_template('login.html', form=form)
 
 @app.route('/recover_pass',methods=['GET','POST'])
@@ -55,12 +61,9 @@ def update_admin():
             return redirect(url_for('home_admin'))
         return render_template('/update_admin.html', form=form)
 
-@app.route('/home_user',methods=['GET'])
+@app.route('/home_user')
 def home_user():
-    form = FormSearch()
-    if(form.validate_on_submit()):
-        return redirect(url_for('home_user'))
-    return render_template('/home_user.html', form=form)
+    return render_template('/home_user.html')
 
 @app.route('/update_user',methods=['GET','POST'])
 def update_user():
@@ -69,6 +72,11 @@ def update_user():
         return redirect(url_for('home_user'))
     return render_template('/update_user.html', form=form)
 
-@app.route('/products_user')
+@app.route('/products_user',methods=['GET'])
 def products_user():
-    return render_template('/products_user.html')
+    form = FormSearch()
+    if(form.validate_on_submit()):
+        accesory = request.form["searchProduct"]
+        res = listAccesories(accesory)
+        return redirect(url_for('home_admin'))
+    return render_template('/products_user.html', form=form)
