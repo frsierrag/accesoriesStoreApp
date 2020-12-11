@@ -58,7 +58,7 @@
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 					{{ form.password.label(class="mdl-textfield__label") }}
-					{{ form.contrpasswordaseña(class="mdl-textfield__input") }}
+					{{ form.password(class="mdl-textfield__input") }}
 					{% for error in form.password.errors %}
 					<span style="color:red;">[{{ error }}]</span>
 					{% endfor %}

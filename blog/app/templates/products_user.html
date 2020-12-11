@@ -19,12 +19,19 @@
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
                 <form action="#">
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-                        <label class="mdl-button mdl-js-button mdl-button--icon" for="searchProduct">
+                        <!-- <label class="mdl-button mdl-js-button mdl-button--icon" for="searchProduct">
                             <i class="zmdi zmdi-search"></i>
-                        </label>
-                        <div class="mdl-textfield__expandable-holder">
-                            <input class="mdl-textfield__input" type="text" id="searchProduct">
-                            <label class="mdl-textfield__label"></label>
+                        </label> -->
+                        <button class="mdl-button mdl-js-button mdl-button--icon" id="searchProductIcon" for="searchProduct">
+                            {{ form.submit(class="zmdi zmdi-search") }}
+                        </button>
+                        <div class="mdl-tooltip" for="searchProductIcon">Buscar accesorio</div>
+                        <div class="mdl-textfield__expandable-holder" id="searchProduct">
+                            {{ form.productName.label(class="mdl-textfield__label") }}
+                            {{ form.productName(class="mdl-textfield__input")}}
+                            {% for error in form.productName.errors %}
+                                <span class="mdl-textfield__error">[{{ error }}]</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </form>
