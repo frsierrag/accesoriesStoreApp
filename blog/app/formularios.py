@@ -24,17 +24,16 @@ class FormRegister(FlaskForm):
     submit = SubmitField('+')
 
 class FormCreate(FlaskForm):
-    reference = StringField()  
     productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?$')])
     quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
-    # price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
+    price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
     image = FileField('File', validators=[DataRequired(message='Se requiere que completes este campo')])
-    submit = SubmitField('+')
+    create = SubmitField('+')
 
 class FormUpdate(FlaskForm): 
     productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo')])
     quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo')])
-    # price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo')])
+    price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo')])
     image = FileField('File', validators=[DataRequired(message='Se requiere que completes este campo')])
     submit = SubmitField('Actualizar')
 
@@ -43,8 +42,8 @@ class FormDelete(FlaskForm):
     submit = SubmitField('Eliminar')
 
 class FormSearch(FlaskForm):
-    productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo')])
-    submit = SubmitField(Markup('+'))
+    product = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo')])
+    search = SubmitField('Buscar')
 
 class FormUpdateInventary(FlaskForm):
     quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo')])

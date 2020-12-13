@@ -12,90 +12,40 @@
 
 <div class="full-width panel-tittle bg-primary text-center tittles">
     Buscar Producto
-</div>
- 
+</div> 
     <div class="mdl-tabs__panel" id="tabListProducts">
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
-                <form action="#">
+                <form action="" method="POST">
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-                        <!-- <label class="mdl-button mdl-js-button mdl-button--icon" for="searchProduct">
+                        <label class="mdl-button mdl-js-button mdl-button--icon" for="searchProduct">
                             <i class="zmdi zmdi-search"></i>
-                        </label> -->
-                        <button class="mdl-button mdl-js-button mdl-button--icon" id="searchProductIcon" for="searchProduct">
-                            {{ form.submit(class="zmdi zmdi-search") }}
-                        </button>
-                        <div class="mdl-tooltip" for="searchProductIcon">Buscar accesorio</div>
-                        <div class="mdl-textfield__expandable-holder" id="searchProduct">
-                            {{ form.productName.label(class="mdl-textfield__label") }}
-                            {{ form.productName(class="mdl-textfield__input")}}
-                            {% for error in form.productName.errors %}
-                                <span class="mdl-textfield__error">[{{ error }}]</span>
-                            {% endfor %}
+                        </label>
+                        <div class="mdl-textfield__expandable-holder">
+                            <input class="mdl-textfield__input" type="text" id="searchProduct" name="searchProduct">
+                            <label class="mdl-textfield__label"></label>
                         </div>
                     </div>
                 </form>
-                
                 <div class="full-width text-center" style="padding: 30px 0;">
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_1.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_user')}}" class="btn btn-success">Actualizar</a>
-
-                    </div>
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_2.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_user')}}" class="btn btn-success">Actualizar</a>
-
-                    </div>
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_3.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_user')}}" class="btn btn-success">Actualizar</a>
-
-                    </div>
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_4.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_user')}}" class="btn btn-success">Actualizar</a>
-
-                    </div>
+                    {% if searchProducts -%}
+                        {% for product in searchProducts %}
+                            <div class="mdl-card mdl-shadow--2dp full-width product-card">
+                                <div class="mdl-card__title">
+                                    <img src="static/{{ searchProducts[loop.index-1].image}}" alt="product" class="img-responsive">
+                                </div>
+                                <div class="mdl-card__actions mdl-card--border">
+                                    Accesorio: {{ searchProducts[loop.index-1].name }} <br>
+                                    Cantidad: {{ searchProducts[loop.index-1].quantity }}
+                                </div>
+                                <a href="{{url_for('update_user')}}" class="btn btn-success btn-block">Actualizar</a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-
-
-
 </section>
 
 {% endblock %}
