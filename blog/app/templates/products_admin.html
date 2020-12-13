@@ -10,10 +10,10 @@
 
 <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
-        <a href="#tabNewProduct" class="mdl-tabs__tab is-active">Nuevo</a>
-        <a href="#tabListProducts" class="mdl-tabs__tab">Listado de productos</a>
+        <a href="#tabNewProduct" class="mdl-tabs__tab {{ stateCreate }}">Nuevo</a>
+        <a href="#tabListProducts" class="mdl-tabs__tab {{ stateSearch }}">Listado de productos</a>
     </div>
-    <div class="mdl-tabs__panel is-active" id="tabNewProduct">
+    <div class="mdl-tabs__panel {{ stateCreate }}" id="tabNewProduct">
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--12-col">
                 <div class="full-width panel mdl-shadow--2dp">
@@ -21,7 +21,7 @@
                         Nuevo Producto
                     </div>
                     <div class="full-width panel-content">
-                        <form>
+                        <form action="#" method="POST">
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
@@ -30,54 +30,88 @@
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="number"
-                                            pattern="-?[0-9- ]*(\.[0-9]+)?" id="BarCode">
+                                            pattern="-?[0-9- ]*(\.[0-9]+)?" id="BarCode" disabled>
                                         <label class="mdl-textfield__label" for="BarCode">Referencia</label>
                                         <span class="mdl-textfield__error">Invalida referencia</span>
                                     </div>
                                 </div>
-                                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text"
-                                            pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="NameProduct">
-                                        <label class="mdl-textfield__label" for="NameProduct">Nombre</label>
-                                        <span class="mdl-textfield__error">Invalido nombre</span>
+                                {% if form_create %}
+                                    <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            {{ form_create.productName.label(class="mdl-textfield__label") }}
+                                            {{ form_create.productName(class="mdl-textfield__input")}}
+                                            {% for error in form_create.productName.errors %}
+                                                <span class="mdl-textfield__error">[{{ error }}]</span>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                                {{ form_create.quantity.label(class="mdl-textfield__label") }}
+                                                {{ form_create.quantity(class="mdl-textfield__input")}}
+                                                {% for error in form_create.quantity.errors %}
+                                                    <span class="mdl-textfield__error">[{{ error }}]</span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                                {{ form_create.price.label(class="mdl-textfield__label") }}
+                                                {{ form_create.price(class="mdl-textfield__input")}}
+                                                {% for error in form_create.price.errors %}
+                                                    <span class="mdl-textfield__error">[{{ error }}]</span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
-                                            id="StrockProduct">
-                                        <label class="mdl-textfield__label" for="StrockProduct">Cantidad</label>
-                                        <span class="mdl-textfield__error">Invalida cantidad</span>
+                                {% else %}
+                                    <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" type="text"
+                                                pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="NameProduct">
+                                            <label class="mdl-textfield__label" for="NameProduct">Nombre</label>
+                                            <span class="mdl-textfield__error">Invalido nombre</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9.]*(\.[0-9]+)?"
-                                            id="PriceProduct">
-                                        <label class="mdl-textfield__label" for="PriceProduct">Precio      </label>
-                                        <span class="mdl-textfield__error">Invalido precio</span>
+                                    <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
+                                                id="StrockProduct">
+                                            <label class="mdl-textfield__label" for="StrockProduct">Cantidad</label>
+                                            <span class="mdl-textfield__error">Invalida cantidad</span>
+                                        </div>
                                     </div>
-                                </div>
-                                                           
-                                
+                                    <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                            <input class="mdl-textfield__input" type="text" pattern="-?[0-9.]*(\.[0-9]+)?"
+                                                id="PriceProduct">
+                                            <label class="mdl-textfield__label" for="PriceProduct">Precio</label>
+                                            <span class="mdl-textfield__error">Invalido precio</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
                                         AGREGAR IMAGEN DEL PRODUCTO</legend><br>
                                 </div>
-                                
-                                <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                <!-- <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield">
                                         <input type="file">
+                                        {{ form_create.image }}
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <p class="text-center">
-                                <button
-                                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
-                                    id="btn-addProduct">
-                                    <i class="zmdi zmdi-plus"></i>
-                                </button>
+                                {% if form_create %}
+                                    <button id="btn-addProduct" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary">
+                                        {{ form_create.create(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary") }}
+                                    </button>
+                                {% else %}
+                                    <button
+                                        class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
+                                        id="btn-addProduct" name="create">
+                                        <i class="zmdi zmdi-plus"></i>
+                                    </button>
+                                {% endif %}
                             <div class="mdl-tooltip" for="btn-addProduct">Agregar producto</div>
                             </p>
                         </form>
@@ -86,86 +120,50 @@
             </div>
         </div>
     </div>
-    <div class="mdl-tabs__panel" id="tabListProducts">
+    <div class="mdl-tabs__panel {{ stateSearch }}" id="tabListProducts">
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
-                <form action="#">
+                <form action="#" method="POST">
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
                         <label class="mdl-button mdl-js-button mdl-button--icon" for="searchProduct">
                             <i class="zmdi zmdi-search"></i>
                         </label>
                         <div class="mdl-textfield__expandable-holder">
-                            <input class="mdl-textfield__input" type="text" id="searchProduct">
-                            <label class="mdl-textfield__label"></label>
+                            {% if form_search %}
+                                {{ form_search.product.label(class="mdl-textfield__label") }}
+                                {{ form_search.product(class="mdl-textfield__input", id="searchProduct") }}
+                                {% for error in form_search.product.errors %}
+                                <span style="color:red;">[{{ error }}]</span>
+                                {% endfor %}
+                            {% else %}
+                                <input class="mdl-textfield__input" type="text" id="searchProduct">
+                                <label class="mdl-textfield__label"></label>
+                            {% endif %}
                         </div>
                     </div>
                 </form>
-                
                 <div class="full-width text-center" style="padding: 30px 0;">
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_1.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_admin')}}" class="btn btn-success">Actualizar</a>
-
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                         
-                        
-                    </div>
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_2.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_admin')}}" class="btn btn-success">Actualizar</a>
-
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                         
-                        
-                    </div>
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_3.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_admin')}}" class="btn btn-success">Actualizar</a>
-
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                         
-                        
-                    </div>
-                    <div class="mdl-card mdl-shadow--2dp full-width product-card">
-                        <div class="mdl-card__title">
-                            <img src="{{ url_for('static', filename='img/accesorio_4.png')}} " alt="product" class="img-responsive">
-                        </div>
-                        
-                        <div class="mdl-card__actions mdl-card--border">
-                            Nombre del producto <br>
-                            Precio: 
-
-                        </div>
-                        <a href="{{url_for('update_admin')}}" class="btn btn-success">Actualizar</a>
-
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                         
-                        
-                    </div>
+                    {% if searchProducts -%}
+                        {% for product in searchProducts %}
+                            <div class="mdl-card mdl-shadow--2dp full-width product-card">
+                                <div class="mdl-card__title">
+                                    <img src="static/{{ searchProducts[loop.index-1].image}}" alt="product" class="img-responsive">
+                                </div>
+                                <div class="mdl-card__actions mdl-card--border">
+                                    Accesorio: {{ searchProducts[loop.index-1].name }} <br>
+                                    Cantidad: {{ searchProducts[loop.index-1].quantity }} <br>
+                                    <div class="row">
+                                        <div class="col-md mdl-card__actions">
+                                            <a href="{{url_for('update_admin')}}" class="btn btn-success btn-block">Actualizar</a>
+                                        </div>
+                                        <div class="col-md mdl-card__actions">
+                                            <button type="button" class="btn btn-danger btn-block">Eliminar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
