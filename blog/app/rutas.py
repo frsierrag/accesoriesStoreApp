@@ -95,8 +95,14 @@ def home_admin():
 @app.route('/admin_register',methods=['GET','POST'])
 @login_required
 def admin_register():
+    
     form = FormRegister()
     if form.validate_on_submit():
+        usuario = Usuario(username=form.userName.data, email=form.email.data, admin=False)
+        usuario.def_clave(form.password.data)
+        bdd.session.add(usuario)
+        bdd.session.commit()
+        flash('Usuario registrado correctamente')
         return redirect(url_for('home_admin'))
     return render_template('admin_register.html', form=form)
 
