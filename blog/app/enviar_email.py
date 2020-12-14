@@ -18,7 +18,7 @@ def contraseña_olvidada(usuario):
     mensaje = MIMEMultipart() # Creamos el objeto mensaje
     token = usuario.obtener_token_contraseña()
     password = ConexionMail.MAIL_PASSWORD
-    msj = render_template('recuperar_contraseña.txt', usuario=usuario, token=token)
+    msj = render_template('mail_recover.txt', usuario=usuario, token=token)
     mensaje['From'] = ConexionMail.MAIL_USERNAME
     mensaje['To'] = usuario.email
     mensaje['Subject'] = 'Recuperar contraseña'
