@@ -20,15 +20,15 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="number"
-                                            pattern="-?[0-9- ]*(\.[0-9]+)?" id="BarCode">
+                                        <input class="mdl-textfield__input" type="text" value="{{ searchProduct.id }}"
+                                            id="BarCode" disabled>
                                         <label class="mdl-textfield__label" for="BarCode">Referencia</label>
                                         <span class="mdl-textfield__error">Invalida referencia</span>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text"
+                                        <input class="mdl-textfield__input" type="text" value="{{ searchProduct.name }}"
                                             pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="NameProduct">
                                         <label class="mdl-textfield__label" for="NameProduct">Nombre</label>
                                         <span class="mdl-textfield__error">Invalido nombre</span>
@@ -37,7 +37,7 @@
                                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="number" pattern="-?[0-9]*(\.[0-9]+)?"
-                                            id="StrockProduct">
+                                            id="StrockProduct" value="{{ searchProduct.quantity }}">
                                         <label class="mdl-textfield__label" for="StrockProduct">Cantidad</label>
                                         <span class="mdl-textfield__error">Invalida cantidad</span>
                                     </div>
@@ -46,7 +46,7 @@
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="text" pattern="-?[0-9.]*(\.[0-9]+)?"
                                             id="PriceProduct">
-                                        <label class="mdl-textfield__label" for="PriceProduct">Precio      </label>
+                                        <label class="mdl-textfield__label" for="PriceProduct">Precio</label>
                                         <span class="mdl-textfield__error">Invalido precio</span>
                                     </div>
                                 </div>

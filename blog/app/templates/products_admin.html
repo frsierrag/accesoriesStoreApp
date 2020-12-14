@@ -35,29 +35,29 @@
                                         <span class="mdl-textfield__error">Invalida referencia</span>
                                     </div>
                                 </div>
-                                {% if form_create %}
+                                {% if formCreate %}
                                     <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            {{ form_create.productName.label(class="mdl-textfield__label") }}
-                                            {{ form_create.productName(class="mdl-textfield__input")}}
-                                            {% for error in form_create.productName.errors %}
+                                            {{ formCreate.productName.label(class="mdl-textfield__label") }}
+                                            {{ formCreate.productName(class="mdl-textfield__input")}}
+                                            {% for error in formCreate.productName.errors %}
                                                 <span class="mdl-textfield__error">[{{ error }}]</span>
                                             {% endfor %}
                                         </div>
                                         <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                                {{ form_create.quantity.label(class="mdl-textfield__label") }}
-                                                {{ form_create.quantity(class="mdl-textfield__input")}}
-                                                {% for error in form_create.quantity.errors %}
+                                                {{ formCreate.quantity.label(class="mdl-textfield__label") }}
+                                                {{ formCreate.quantity(class="mdl-textfield__input")}}
+                                                {% for error in formCreate.quantity.errors %}
                                                     <span class="mdl-textfield__error">[{{ error }}]</span>
                                                 {% endfor %}
                                             </div>
                                         </div>
                                         <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                                {{ form_create.price.label(class="mdl-textfield__label") }}
-                                                {{ form_create.price(class="mdl-textfield__input")}}
-                                                {% for error in form_create.price.errors %}
+                                                {{ formCreate.price.label(class="mdl-textfield__label") }}
+                                                {{ formCreate.price(class="mdl-textfield__input")}}
+                                                {% for error in formCreate.price.errors %}
                                                     <span class="mdl-textfield__error">[{{ error }}]</span>
                                                 {% endfor %}
                                             </div>
@@ -96,14 +96,14 @@
                                 <!-- <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield">
                                         <input type="file">
-                                        {{ form_create.image }}
+                                        {{ formCreate.image }}
                                     </div>
                                 </div> -->
                             </div>
                             <p class="text-center">
-                                {% if form_create %}
+                                {% if formCreate %}
                                     <button id="btn-addProduct" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary">
-                                        {{ form_create.create(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary") }}
+                                        {{ formCreate.create(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary") }}
                                     </button>
                                 {% else %}
                                     <button
@@ -129,10 +129,10 @@
                             <i class="zmdi zmdi-search"></i>
                         </label>
                         <div class="mdl-textfield__expandable-holder">
-                            {% if form_search %}
-                                {{ form_search.product.label(class="mdl-textfield__label") }}
-                                {{ form_search.product(class="mdl-textfield__input", id="searchProduct") }}
-                                {% for error in form_search.product.errors %}
+                            {% if formSearch %}
+                                {{ formSearch.product.label(class="mdl-textfield__label") }}
+                                {{ formSearch.product(class="mdl-textfield__input", id="searchProduct") }}
+                                {% for error in formSearch.product.errors %}
                                 <span style="color:red;">[{{ error }}]</span>
                                 {% endfor %}
                             {% else %}
@@ -154,7 +154,7 @@
                                     Cantidad: {{ searchProducts[loop.index-1].quantity }} <br>
                                     <div class="row">
                                         <div class="col-md mdl-card__actions">
-                                            <a href="{{url_for('update_admin')}}" class="btn btn-success btn-block">Actualizar</a>
+                                            <a href="{{url_for('update_admin', accesory=product)}}" class="btn btn-success btn-block">Actualizar</a>
                                         </div>
                                         <div class="col-md mdl-card__actions">
                                             <button type="button" class="btn btn-danger btn-block">Eliminar</button>

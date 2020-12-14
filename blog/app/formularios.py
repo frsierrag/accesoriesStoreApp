@@ -1,5 +1,4 @@
 from flask_wtf import FlaskForm
-from jinja2 import Markup
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.fields.core import FloatField, IntegerField
 from wtforms.fields.simple import FileField
@@ -11,11 +10,14 @@ class FormLogin(FlaskForm):
     remember = BooleanField('Recordar Usuario')
     submit = SubmitField('Iniciar Sesión')
 
-class FormRecover(FlaskForm):
-    userName = StringField('Usuario', validators=[DataRequired(message='Se requiere que completes este campo')])
+class FormRecoverPass(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(message='Este campo es requerido')])
+    submit = SubmitField('Recuperar contraseña')
+
+class FormChangePass(FlaskForm):
     newPassword = PasswordField('Nueva Contraseña', validators=[DataRequired(message='Se requiere que completes este campo')])
-    confirmPassword = BooleanField('Confirmar Contraseña', validators=[DataRequired(message='Se requiere que completes este campo'), EqualTo('newPassword', message='Contraseña debe coincidir')])
-    submit = SubmitField('Enviar')
+    confirmPassword = PasswordField('Confirmar Contraseña', validators=[DataRequired(message='Se requiere que completes este campo'), EqualTo('newPassword', message='Contraseña debe coincidir')])
+    submit = SubmitField('Solicitar cambio de contraseña')
 
 class FormRegister(FlaskForm):
     userName = StringField('Usuario', validators=[DataRequired(message='Se requiere que completes este campo')])
