@@ -168,9 +168,12 @@ def products_user():
 @login_required
 def update_user():
     form = FormUpdateInventary()
-    if form.validate_on_submit():
-        return redirect(url_for('home_user'))
-    return render_template('/update_user.html', form=form)
+    print(request.args["accesory"])
+    product = request.args["accesory"]
+    product = json.loads(product.replace("\'", "\""))
+    if "accesory" in request.args:
+        return render_template('/update_user.html', FormUpdateInventary=form, searchProduct=product)
+    # return render_template('/home_user.html')
 
 
 @app.route('/logout')

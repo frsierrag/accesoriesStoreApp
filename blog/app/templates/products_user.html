@@ -1,9 +1,8 @@
-<!-- 
-* Copyright 2018 Carlos Eduardo Alfaro Orellana
-  https://www.youtube.com/c/CarlosAlfaro007
--->
-
 {% extends 'base_user.html' %}
+
+{% block perfil %}
+{{ current_user.username }}
+{% endblock %}
 
 
 {% block body %}
@@ -38,7 +37,7 @@
                                     Accesorio: {{ searchProducts[loop.index-1].name }} <br>
                                     Cantidad: {{ searchProducts[loop.index-1].quantity }}
                                 </div>
-                                <a href="{{url_for('update_user')}}" class="btn btn-success btn-block">Actualizar</a>
+                                <a href="{{url_for('update_user', accesory=product)}}" class="btn btn-success btn-block">Actualizar</a>
                             </div>
                         {% endfor %}
                     {% endif %}

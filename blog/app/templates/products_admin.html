@@ -1,10 +1,8 @@
-<!-- 
-* Copyright 2018 Carlos Eduardo Alfaro Orellana
-  https://www.youtube.com/c/CarlosAlfaro007
--->
-
 {% extends 'base_admin.html' %}
 
+{% block perfil %}
+{{ current_user.username }}
+{% endblock %}
 
 {% block body %}
 
