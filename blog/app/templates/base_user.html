@@ -92,11 +92,14 @@
 				<div class="mdl-tooltip" for="btn-menu">Hide / Show MENU</div>
 				<nav class="navBar-options-list">
 					<ul class="list-unstyle">
-						
+						<!-- pageContent
 						<li class="btn-exit" id="btn-exit">
 							<i class="zmdi zmdi-power"></i>
 							<div class="mdl-tooltip" for="btn-exit">Salir</div>
 						</li>
+						-->
+						<li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+						
 						<li class="text-condensedLight noLink" ><small>User Name</small></li>
 						<li class="noLink">
 							<figure>
