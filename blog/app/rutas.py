@@ -24,7 +24,11 @@ def index():
 def login():
     #     user = userValidate(request.form["userName"], request.form["password"])
     if current_user.is_authenticated:
-       return redirect(url_for('home_user'))
+        TipoUsuario = current_user.admin
+        if TipoUsuario:
+            return redirect(url_for('home_admin'))
+        else:
+            return redirect(url_for('home_user'))
     form = FormLogin()
     if form.validate_on_submit():
         usuario = Usuario.query.filter_by(username=form.userName.data).first()
@@ -54,7 +58,11 @@ def login():
 @app.route('/recover_password', methods=['GET', 'POST'])
 def recover_password():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        TipoUsuario = current_user.admin
+        if TipoUsuario:
+            return redirect(url_for('home_admin'))
+        else:
+            return redirect(url_for('home_user'))
     form = FormRecoverPass()
     if form.validate_on_submit():
         usuario = Usuario.query.filter_by(email=form.email.data).first()
@@ -73,7 +81,11 @@ def recover_password():
 @app.route('/change_pass/<token>', methods= ['GET', 'POST'])
 def change_pass(token):
     if current_user.is_authenticated:
-        return redirect(url_for('home_user'))
+        TipoUsuario = current_user.admin
+        if TipoUsuario:
+            return redirect(url_for('home_admin'))
+        else:
+            return redirect(url_for('home_user'))
     usuario = Usuario.verificar_token_contraseña(token)
     if not usuario:
         return redirect(url_for('index'))
@@ -89,14 +101,27 @@ def change_pass(token):
 @app.route('/home_admin')
 @login_required
 def home_admin():
+    if current_user.is_authenticated:
+        TipoUsuario = current_user.admin
+        if not TipoUsuario:
+            return redirect(url_for('home_user'))        
     return render_template('/home_admin.html')
 
 
 @app.route('/admin_register',methods=['GET','POST'])
 @login_required
 def admin_register():
+    if current_user.is_authenticated:
+        TipoUsuario = current_user.admin
+        if not TipoUsuario:
+            return redirect(url_for('home_user'))
     form = FormRegister()
     if form.validate_on_submit():
+        usuario = Usuario(username=form.userName.data, email=form.email.data, admin=False)
+        usuario.def_clave(form.password.data)
+        bdd.session.add(usuario)
+        bdd.session.commit()
+        flash('Usuario registrado correctamente')
         return redirect(url_for('home_admin'))
     return render_template('admin_register.html', form=form)
 
@@ -104,19 +129,22 @@ def admin_register():
 @app.route('/products_admin',methods=['GET','POST'])
 @login_required
 def products_admin():
+    if current_user.is_authenticated:
+        TipoUsuario = current_user.admin
+        if not TipoUsuario:
+            return redirect(url_for('home_user'))
     formCreate = FormCreate()
     formSearch = FormSearch()
     if request.method == "GET":
         return render_template('/products_admin.html', stateSearch='', stateCreate='is-active', 
             formCreate=formCreate, formSearch=formSearch)
     else:
-        if "product" in request.form:
-            accesory = request.form["product"]
+        if "searchProduct" in request.form:
+            accesory = request.form["searchProduct"]
             lists = listAccesories(accesory)
-            print(lists)
             if lists != "1":
                 return render_template('/products_admin.html', searchProducts=lists, stateSearch='is-active', 
-                    stateCreate='', formCreate=formCreate, formSearch=formSearch)
+                    stateCreate='', formCreate=formCreate)
             else:
                 return render_template('/products_admin.html')
         elif "create" in request.form:
@@ -133,13 +161,21 @@ def products_admin():
 @app.route('/update_admin',methods=['GET','POST','DELETE'])
 @login_required
 def update_admin():
+    if current_user.is_authenticated:
+        TipoUsuario = current_user.admin
+        if not TipoUsuario:
+            return redirect(url_for('home_user'))
     formUpdate = FormUpdate()
     formDelete = FormDelete()
-    print(request.args["accesory"])
-    product = request.args["accesory"]
-    product = json.loads(product.replace("\'", "\""))
-    if "accesory" in request.args:
-        return render_template('/update_admin.html', formUpdate=formUpdate, searchProduct=product)
+    if request.method == "GET":
+        product = request.args["accesory"]
+        product = json.loads(product.replace("\'", "\""))
+        if "accesory" in request.args:
+            return render_template('/update_admin.html', formUpdate=formUpdate, searchProduct=product)
+    elif request.method == "POST":
+        if formUpdate.validate_on_submit():
+            return render_template('/home_user.html')
+        return render_template('/update_admin.html', formUpdate=formUpdate)
     elif request.method == "DELETE":
         return render_template('/update_admin.html', formDelete=formDelete)
 
@@ -147,12 +183,20 @@ def update_admin():
 @app.route('/home_user')
 @login_required
 def home_user():
+    if current_user.is_authenticated:
+        TipoUsuario = current_user.admin
+        if TipoUsuario:
+            return redirect(url_for('home_admin'))        
     return render_template('/home_user.html')
 
 
 @app.route('/products_user',methods=['GET','POST'])
 @login_required
 def products_user():
+    if current_user.is_authenticated:
+        TipoUsuario = current_user.admin
+        if TipoUsuario:
+            return redirect(url_for('home_admin'))
     if request.method == "GET":
         return render_template('/products_user.html')
     else:
@@ -167,13 +211,20 @@ def products_user():
 @app.route('/update_user',methods=['GET','POST'])
 @login_required
 def update_user():
-    form = FormUpdateInventary()
-    print(request.args["accesory"])
-    product = request.args["accesory"]
-    product = json.loads(product.replace("\'", "\""))
-    if "accesory" in request.args:
-        return render_template('/update_user.html', FormUpdateInventary=form, searchProduct=product)
-    # return render_template('/home_user.html')
+    if current_user.is_authenticated:
+        TipoUsuario = current_user.admin
+        if TipoUsuario:
+            return redirect(url_for('home_admin'))
+    formUpdateInventary = FormUpdateInventary()
+    if request.method == "GET":
+        product = request.args["accesory"]
+        product = json.loads(product.replace("\'", "\""))
+        if "accesory" in request.args:
+            return render_template('/update_user.html', form=formUpdateInventary, searchProduct=product)
+    else:
+        if formUpdateInventary.validate_on_submit():
+            return render_template('/home_user.html', form=formUpdateInventary)
+        return render_template('/update_user.html', form=formUpdateInventary)
 
 
 @app.route('/logout')

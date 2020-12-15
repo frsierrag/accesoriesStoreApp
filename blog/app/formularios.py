@@ -37,6 +37,7 @@ class FormUpdate(FlaskForm):
     quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo')])
     price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo')])
     image = FileField('File', validators=[DataRequired(message='Se requiere que completes este campo')])
+    # image = FileField(u'Image File', [validators.regexp(u'^[^/\\]\.jpg$')])
     submit = SubmitField('Actualizar')
 
 class FormDelete(FlaskForm):
@@ -48,5 +49,6 @@ class FormSearch(FlaskForm):
     search = SubmitField('Buscar')
 
 class FormUpdateInventary(FlaskForm):
-    quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo')])
+    quantity = StringField('Cantidad', validators=[DataRequired(message='Se requiere que completes este campo'), 
+        Regexp('/^[A-Za-z]+$/g', message='Cantidad invalida')])
     submit = SubmitField('Actualizar')

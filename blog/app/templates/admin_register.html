@@ -1,5 +1,10 @@
 {% extends 'base_admin.html' %}
 
+
+{% block perfil_lateral %}
+{{ current_user.username }}
+{% endblock %}
+
 {% block perfil %}
 {{ current_user.username }}
 {% endblock %}
