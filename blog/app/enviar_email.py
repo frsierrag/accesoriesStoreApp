@@ -14,7 +14,7 @@ def email_asincrono(server, mensaje):
 
 def contraseña_olvidada(usuario):
     # Configurando servidor email para contraseñas olvidadas
-    print("holaaaaa ", usuario.email)
+    #print("holaaaaa ", usuario.email)
     mensaje = MIMEMultipart() # Creamos el objeto mensaje
     token = usuario.obtener_token_contraseña()
     password = ConexionMail.MAIL_PASSWORD

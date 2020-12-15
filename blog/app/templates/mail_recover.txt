@@ -1,6 +1,6 @@
 Querido {{ usuario.username }},
-Para recuperar tu contrase�a haz click en el siguiente enlace:
-{{ url_for('resetear_contrase�a', token=token, _external=True) }}
-Si no has sido t� el que solicit� la recuperaci�n de contrase�a por favor ignore este mensaje.
+Para recuperar tu contraseña haz click en el siguiente enlace:
+{{ url_for('change_pass', token=token, _external=True) }}
+Si no has sido tú el que solicitó la recuperación de contraseña por favor ignore este mensaje.
 Sinceramente,
-%Tu nombre%, Desarrollador del blog.
+Marcela Martinez
