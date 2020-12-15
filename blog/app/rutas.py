@@ -110,13 +110,12 @@ def products_admin():
         return render_template('/products_admin.html', stateSearch='', stateCreate='is-active', 
             formCreate=formCreate, formSearch=formSearch)
     else:
-        if "product" in request.form:
-            accesory = request.form["product"]
+        if "searchProduct" in request.form:
+            accesory = request.form["searchProduct"]
             lists = listAccesories(accesory)
-            print(lists)
             if lists != "1":
                 return render_template('/products_admin.html', searchProducts=lists, stateSearch='is-active', 
-                    stateCreate='', formCreate=formCreate, formSearch=formSearch)
+                    stateCreate='', formCreate=formCreate)
             else:
                 return render_template('/products_admin.html')
         elif "create" in request.form:
@@ -135,11 +134,15 @@ def products_admin():
 def update_admin():
     formUpdate = FormUpdate()
     formDelete = FormDelete()
-    print(request.args["accesory"])
-    product = request.args["accesory"]
-    product = json.loads(product.replace("\'", "\""))
-    if "accesory" in request.args:
-        return render_template('/update_admin.html', formUpdate=formUpdate, searchProduct=product)
+    if request.method == "GET":
+        product = request.args["accesory"]
+        product = json.loads(product.replace("\'", "\""))
+        if "accesory" in request.args:
+            return render_template('/update_admin.html', formUpdate=formUpdate, searchProduct=product)
+    elif request.method == "POST":
+        if formUpdate.validate_on_submit():
+            return render_template('/home_user.html')
+        return render_template('/update_admin.html', formUpdate=formUpdate)
     elif request.method == "DELETE":
         return render_template('/update_admin.html', formDelete=formDelete)
 
@@ -167,13 +170,16 @@ def products_user():
 @app.route('/update_user',methods=['GET','POST'])
 @login_required
 def update_user():
-    form = FormUpdateInventary()
-    print(request.args["accesory"])
-    product = request.args["accesory"]
-    product = json.loads(product.replace("\'", "\""))
-    if "accesory" in request.args:
-        return render_template('/update_user.html', FormUpdateInventary=form, searchProduct=product)
-    # return render_template('/home_user.html')
+    formUpdateInventary = FormUpdateInventary()
+    if request.method == "GET":
+        product = request.args["accesory"]
+        product = json.loads(product.replace("\'", "\""))
+        if "accesory" in request.args:
+            return render_template('/update_user.html', form=formUpdateInventary, searchProduct=product)
+    else:
+        if formUpdateInventary.validate_on_submit():
+            return render_template('/home_user.html', form=formUpdateInventary)
+        return render_template('/update_user.html', form=formUpdateInventary)
 
 
 @app.route('/logout')

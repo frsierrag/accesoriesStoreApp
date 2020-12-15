@@ -45,7 +45,10 @@
 				</div>
 				<figcaption>
 					<span>
-						Nombre usuario<br>
+						{% block profile %}
+						{{ current_user.username }}
+						{% endblock %}
+						<br>
 						<small>user</small>
 					</span>
 				</figcaption>

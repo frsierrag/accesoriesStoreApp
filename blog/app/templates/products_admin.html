@@ -127,16 +127,8 @@
                             <i class="zmdi zmdi-search"></i>
                         </label>
                         <div class="mdl-textfield__expandable-holder">
-                            {% if formSearch %}
-                                {{ formSearch.product.label(class="mdl-textfield__label") }}
-                                {{ formSearch.product(class="mdl-textfield__input", id="searchProduct") }}
-                                {% for error in formSearch.product.errors %}
-                                <span style="color:red;">[{{ error }}]</span>
-                                {% endfor %}
-                            {% else %}
-                                <input class="mdl-textfield__input" type="text" id="searchProduct">
-                                <label class="mdl-textfield__label"></label>
-                            {% endif %}
+                            <input class="mdl-textfield__input" type="text" id="searchProduct" name="searchProduct">
+                            <label class="mdl-textfield__label"></label>
                         </div>
                     </div>
                 </form>
