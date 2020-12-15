@@ -19,7 +19,7 @@
                         Actualizar producto
                     </div>
                     <div class="full-width panel-content">
-                        <form action="/home_user">
+                        <form action="/home_admin" method="POST" enctype="multipart/form-data">
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
@@ -66,16 +66,19 @@
                                 
                                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield">
-                                        <input type="file">
+                                        <!-- <input type="file"> -->
+                                        {{ formUpdate.image }}
                                     </div>
                                 </div>
                             </div>
                             <p class="text-center">
-                                <button
+                                <!-- <button
                                     class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
                                     id="btn-addProduct">
                                     <i class="zmdi zmdi-plus"></i>
-                                </button>
+                                </button> -->
+                                {{ formUpdate.submit(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary", 
+                                    id="btn-addProduct") }}
                             <div class="mdl-tooltip" for="btn-addProduct">Actualizar producto</div>
                             </p>
                         </form>

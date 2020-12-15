@@ -23,7 +23,7 @@
                         Nuevo Producto
                     </div>
                     <div class="full-width panel-content">
-                        <form action="#" method="POST">
+                        <form method="POST" enctype="multipart/form-data">
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
@@ -95,25 +95,20 @@
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
                                         AGREGAR IMAGEN DEL PRODUCTO</legend><br>
                                 </div>
-                                <!-- <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+                                <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield">
-                                        <input type="file">
                                         {{ formCreate.image }}
                                     </div>
-                                </div> -->
+                                </div>
                             </div>
                             <p class="text-center">
-                                {% if formCreate %}
-                                    <button id="btn-addProduct" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary">
-                                        {{ formCreate.create(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary") }}
-                                    </button>
-                                {% else %}
-                                    <button
-                                        class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
-                                        id="btn-addProduct" name="create">
-                                        <i class="zmdi zmdi-plus"></i>
-                                    </button>
-                                {% endif %}
+                                {{ formCreate.create(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary", 
+                                    id="btn-addProduct") }}
+                                <!-- <button
+                                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
+                                    id="btn-addProduct" name="create">
+                                    <i class="zmdi zmdi-plus"></i>
+                                </button> -->
                             <div class="mdl-tooltip" for="btn-addProduct">Agregar producto</div>
                             </p>
                         </form>
