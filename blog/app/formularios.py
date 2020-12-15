@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.fields.core import FloatField, IntegerField
-from wtforms.fields.simple import FileField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 
 class FormLogin(FlaskForm):
@@ -29,16 +29,16 @@ class FormCreate(FlaskForm):
     productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?$')])
     quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
     price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
-    image = FileField('File', validators=[DataRequired(message='Se requiere que completes este campo')])
+    image = FileField('selecciona imagen:', validators=[FileRequired(message='Requerido'), FileAllowed(['jpg', 'png'], 'Images only!')])
     create = SubmitField('+')
 
 class FormUpdate(FlaskForm): 
     productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo')])
     quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo')])
     price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo')])
-    image = FileField('File', validators=[DataRequired(message='Se requiere que completes este campo')])
+    image = FileField('selecciona imagen:', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
     # image = FileField(u'Image File', [validators.regexp(u'^[^/\\]\.jpg$')])
-    submit = SubmitField('Actualizar')
+    submit = SubmitField('+')
 
 class FormDelete(FlaskForm):
     reference = StringField()
