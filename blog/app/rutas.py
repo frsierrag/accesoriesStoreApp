@@ -5,7 +5,7 @@ from flask_login import login_manager, login_user, logout_user, login_required, 
 from app.formularios import FormLogin, FormRecoverPass, FormChangePass, FormRegister, FormCreate, FormUpdate, FormDelete, FormSearch, FormUpdateInventary
 from app.mocks import userValidate, listAccesories
 from app.modelos import Usuario, Producto
-from app.enviar_email import contraseña_olvidada
+from app.enviar_email import contraseña_olvidada, envio_credenciales
 from werkzeug.urls import url_parse
 
 
@@ -125,6 +125,7 @@ def admin_register():
         bdd.session.add(usuario)
         bdd.session.commit()
         flash('Usuario registrado correctamente')
+        envio_credenciales(form.userName.data, form.password.data, form.email.data)
         return redirect(url_for('home_admin'))
     return render_template('admin_register.html', form=form)
 
@@ -219,7 +220,7 @@ def update_user():
         TipoUsuario = current_user.admin
         if TipoUsuario:
             return redirect(url_for('home_admin'))
-            
+
     form = FormUpdateInventary()
     print(request.args["accesory"])
     product = request.args["accesory"]
