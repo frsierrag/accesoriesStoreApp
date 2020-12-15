@@ -12,7 +12,7 @@ class FormLogin(FlaskForm):
 
 class FormRecoverPass(FlaskForm):
     email = StringField('Email', validators=[DataRequired(message='Este campo es requerido')])
-    submit = SubmitField('Recuperar contraseña')
+    submit = SubmitField('Enviar')
 
 class FormChangePass(FlaskForm):
     newPassword = PasswordField('Nueva Contraseña', validators=[DataRequired(message='Se requiere que completes este campo')])

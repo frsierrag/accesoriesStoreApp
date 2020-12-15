@@ -69,5 +69,7 @@ $(document).ready(function(){
                 autoHideScrollbar: true,
                 scrollButtons:{ enable: true }
             });
-        });
+		});
+		
+	
 })(jQuery);
