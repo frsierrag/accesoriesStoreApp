@@ -115,10 +115,9 @@ def home_admin():
 def admin_register():
     if current_user.is_authenticated:
         TipoUsuario = current_user.admin
-        if TipoUsuario:
-            return redirect(url_for('home_admin'))
-        else:
+        if not TipoUsuario:
             return redirect(url_for('home_user'))
+
     form = FormRegister()
     if form.validate_on_submit():
         usuario = Usuario(username=form.userName.data, email=form.email.data, admin=False)
@@ -135,10 +134,9 @@ def admin_register():
 def products_admin():
     if current_user.is_authenticated:
         TipoUsuario = current_user.admin
-        if TipoUsuario:
-            return redirect(url_for('home_admin'))
-        else:
+        if not TipoUsuario:
             return redirect(url_for('home_user'))
+
     formCreate = FormCreate()
     formSearch = FormSearch()
     if request.method == "GET":
@@ -170,10 +168,9 @@ def products_admin():
 def update_admin():
     if current_user.is_authenticated:
         TipoUsuario = current_user.admin
-        if TipoUsuario:
-            return redirect(url_for('home_admin'))
-        else:
+        if not TipoUsuario:
             return redirect(url_for('home_user'))
+
     formUpdate = FormUpdate()
     formDelete = FormDelete()
     print(request.args["accesory"])
@@ -203,8 +200,7 @@ def products_user():
         TipoUsuario = current_user.admin
         if TipoUsuario:
             return redirect(url_for('home_admin'))
-        else:
-            return redirect(url_for('home_user'))
+
     if request.method == "GET":
         return render_template('/products_user.html')
     else:
@@ -223,8 +219,7 @@ def update_user():
         TipoUsuario = current_user.admin
         if TipoUsuario:
             return redirect(url_for('home_admin'))
-        else:
-            return redirect(url_for('home_user'))
+            
     form = FormUpdateInventary()
     print(request.args["accesory"])
     product = request.args["accesory"]
