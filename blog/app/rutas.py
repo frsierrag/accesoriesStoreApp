@@ -10,10 +10,6 @@ from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 
 
-UPLOAD_FOLDER = 'static\img'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 
@@ -25,7 +21,7 @@ def index():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-    #     user = userValidate(request.form["userName"], request.form["password"])
+    # user = userValidate(request.form["userName"], request.form["password"])
     if current_user.is_authenticated:
         tipoUsuario = current_user.admin
         if tipoUsuario:
@@ -156,7 +152,7 @@ def products_admin():
             pic = request.files['image']
             while pic:
                 if pic and allowed_file(pic.filename):
-                    pic.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pic.filename))
+                    pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
                     createAccesories(formCreate)
                     return render_template('/home_admin.html')
                 else: formCreate.image.errors.append('Extensión de imágen incorrecta')
@@ -187,7 +183,7 @@ def update_admin():
             pic = request.files['image']
             while pic:
                 if pic and allowed_file(pic.filename):
-                    pic.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pic.filename))
+                    pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
                     updateAccesories(formUpdate)
                     return render_template('/home_admin.html', formUpdate=formUpdate)
                 else: formUpdate.image.errors.append('Extensión de imágen incorrecta')
@@ -245,6 +241,11 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+	return render_template("error.html",error="Página no encontrada..."), 404
+
+
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
