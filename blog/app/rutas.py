@@ -243,7 +243,7 @@ def logout():
 
 @app.errorhandler(404)
 def page_not_found(error):
-	return render_template("error.html",error="Página no encontrada..."), 404
+	return render_template("error.html", error="Página no encontrada..."), 404
 
 
 def allowed_file(filename):
