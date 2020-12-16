@@ -104,11 +104,6 @@
                             <p class="text-center">
                                 {{ formCreate.create(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary", 
                                     id="btn-addProduct") }}
-                                <!-- <button
-                                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
-                                    id="btn-addProduct" name="create">
-                                    <i class="zmdi zmdi-plus"></i>
-                                </button> -->
                             <div class="mdl-tooltip" for="btn-addProduct">Agregar producto</div>
                             </p>
                         </form>
@@ -132,7 +127,7 @@
                     </div>
                 </form>
                 <div class="full-width text-center" style="padding: 30px 0;">
-                    {% if searchProducts -%}
+                    {% if searchProducts|length > 0 %}
                         {% for product in searchProducts %}
                             <div class="mdl-card mdl-shadow--2dp full-width product-card">
                                 <div class="mdl-card__title">
@@ -143,10 +138,10 @@
                                     Cantidad: {{ searchProducts[loop.index-1].quantity }} <br>
                                     <div class="row">
                                         <div class="col-md mdl-card__actions">
-                                            <a href="{{url_for('update_admin', accesory=product)}}" class="btn btn-success btn-block">Actualizar</a>
+                                            <a href="{{ url_for('update_admin', accesory=product) }}" name="Update" class="btn btn-success btn-block">Actualizar</a>
                                         </div>
                                         <div class="col-md mdl-card__actions">
-                                            <button type="button" class="btn btn-danger btn-block">Eliminar</button>
+                                            <a href="{{ url_for('update_admin', idProduct=product.id) }}" name="Delete" class="btn btn-danger btn-block">Eliminar</a>
                                         </div>
                                     </div>
                                 </div>

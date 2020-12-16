@@ -3,7 +3,7 @@ from app import app, bdd
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.formularios import FormLogin, FormRecoverPass, FormChangePass, FormRegister, FormCreate, FormUpdate, FormDelete, FormSearch, FormUpdateInventary
-from app.mocks import userValidate, listAccesories
+from app.mocks import listAccesories, createAccesories, updateAccesories, deleteAccesory
 from app.modelos import Usuario, Producto
 from app.enviar_email import contraseña_olvidada
 from werkzeug.urls import url_parse
@@ -145,18 +145,22 @@ def products_admin():
         if "searchProduct" in request.form:
             accesory = request.form["searchProduct"]
             lists = listAccesories(accesory)
-            if lists != "1":
+            if len(lists) > 0:
                 return render_template('/products_admin.html', searchProducts=lists, stateSearch='is-active', 
                     stateCreate='', formCreate=formCreate)
             else:
-                return render_template('/products_admin.html')
+                return render_template('/products_admin.html', stateCreate='', stateSearch='is-active', 
+                    formCreate=formCreate, formSearch=formSearch)
         if "image" in request.files:
             pic = request.files['image']
-            if pic and allowed_file(pic.filename):
-                pic.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pic.filename))
-                return render_template('/home_admin.html')
+            while pic:
+                if pic and allowed_file(pic.filename):
+                    pic.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pic.filename))
+                    createAccesories(formCreate)
+                    return render_template('/home_admin.html')
+                else: formCreate.image.errors.append('Extensión de imágen incorrecta')
         return render_template('/products_admin.html', formCreate=formCreate, formSearch=formSearch, 
-            stateSearch='', stateCreate='is-active',)
+            stateSearch='', stateCreate='is-active')
 
 
 @app.route('/update_admin',methods=['GET','POST','DELETE'])
@@ -169,19 +173,24 @@ def update_admin():
     formUpdate = FormUpdate()
     formDelete = FormDelete()
     if request.method == "GET":
-        product = request.args["accesory"]
-        product = json.loads(product.replace("\'", "\""))
         if "accesory" in request.args:
+            product = request.args["accesory"]
+            product = json.loads(product.replace("\'", "\""))
             return render_template('/update_admin.html', formUpdate=formUpdate, searchProduct=product)
-    elif request.method == "POST":
+        if "idProduct" in request.args:
+            idProduct = request.args["idProduct"]
+            deleteAccesory(idProduct)
+            return render_template('/home_admin.html')
+    else:
         if "image" in request.files:
             pic = request.files['image']
-            if pic and allowed_file(pic.filename):
-                pic.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pic.filename))
-                return render_template('/home_admin.html')
-        return render_template('/update_admin.html', formCreate=formUpdate)
-    elif request.method == "DELETE":
-        return render_template('/update_admin.html', formDelete=formDelete)
+            while pic:
+                if pic and allowed_file(pic.filename):
+                    pic.save(os.path.join(basedir, app.config['UPLOAD_FOLDER'], pic.filename))
+                    updateAccesories(formUpdate)
+                    return render_template('/home_admin.html', formUpdate=formUpdate)
+                else: formUpdate.image.errors.append('Extensión de imágen incorrecta')
+        return render_template('/update_admin.html')
 
 
 @app.route('/home_user')
