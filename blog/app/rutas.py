@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app.formularios import FormLogin, FormRecoverPass, FormChangePass, FormRegister, FormCreate, FormUpdate, FormDelete, FormSearch, FormUpdateInventary
 from app.mocks import listAccesories, createAccesories, updateAccesories, deleteAccesory
 from app.modelos import Usuario, Producto
-from app.enviar_email import contraseña_olvidada
+from app.enviar_email import contraseña_olvidada, envio_credenciales
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 
@@ -125,6 +125,7 @@ def admin_register():
         bdd.session.add(usuario)
         bdd.session.commit()
         flash('Usuario registrado correctamente')
+        envio_credenciales(form.userName.data, form.password.data, form.email.data)
         return redirect(url_for('home_admin'))
     return render_template('admin_register.html', form=form)
 
@@ -228,16 +229,14 @@ def update_user():
         tipoUsuario = current_user.admin
         if tipoUsuario:
             return redirect(url_for('home_admin'))
-    formUpdateInventary = FormUpdateInventary()
-    if request.method == "GET":
-        product = request.args["accesory"]
-        product = json.loads(product.replace("\'", "\""))
-        if "accesory" in request.args:
-            return render_template('/update_user.html', form=formUpdateInventary, searchProduct=product)
-    else:
-        if formUpdateInventary.validate_on_submit():
-            return render_template('/home_user.html', form=formUpdateInventary)
-        return render_template('/update_user.html', form=formUpdateInventary)
+
+    form = FormUpdateInventary()
+    print(request.args["accesory"])
+    product = request.args["accesory"]
+    product = json.loads(product.replace("\'", "\""))
+    if "accesory" in request.args:
+        return render_template('/update_user.html', FormUpdateInventary=form, searchProduct=product)
+    # return render_template('/home_user.html')
 
 
 @app.route('/logout')

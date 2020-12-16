@@ -27,3 +27,19 @@ def contraseña_olvidada(usuario):
     server.starttls()
     server.login(mensaje['From'], password)
     Thread(target=email_asincrono, args=(server,mensaje)).start()
+
+
+def envio_credenciales(nameUser, passwordUser, emailUser):
+    # Configurando servidor email 
+    mensaje = MIMEMultipart() # Creamos el objeto mensaje
+    msj = 'Hola, se ha registrado correctamente en el sistema de Inventario. Su usuario es: ' + nameUser + ' y su contraseña es: ' +  passwordUser + '. Atentamente Soporte Inventario'
+    password = ConexionMail.MAIL_PASSWORD
+    mensaje['From'] = ConexionMail.MAIL_USERNAME
+    mensaje['To'] = emailUser
+    mensaje['Subject'] = 'Credenciales para ingreso a Inventario'
+    mensaje.attach(MIMEText(msj, 'plain')) # Le decimos que el mensaje contiene solamente texto plano
+    server = smtplib.SMTP('smtp.gmail.com: 587')
+    server.starttls()
+    server.login(mensaje['From'], password)
+    server.sendmail(mensaje['From'], mensaje['To'], mensaje.as_string())
+    server.quit()
