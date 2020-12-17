@@ -10,7 +10,7 @@ from werkzeug.urls import url_parse
 
 
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-
+id_product = 0
 
 @app.route('/')
 @app.route('/index')
@@ -32,6 +32,7 @@ def login():
         usuario = Usuario.query.filter_by(username=form.userName.data).first()
         administrador = Usuario.query.filter_by(username=form.userName.data).filter_by(admin=1).all()
         if usuario and not administrador:
+            # si es usuario ingresa esta condicion
             if usuario.verif_clave(form.password.data):
                 login_user(usuario, remember=form.remember.data)
                 next_page = request.args.get('next')
@@ -41,6 +42,7 @@ def login():
             else:
                 form.password.errors.append("Contraseña incorrecta")
         elif usuario and administrador:
+            # si es administrador ingresa esta condicion
             if usuario.verif_clave(form.password.data):
                 login_user(usuario, remember=form.remember.data)
                 next_page = request.args.get('next')
@@ -127,6 +129,7 @@ def admin_register():
 @app.route('/products_admin',methods=['GET','POST'])
 @login_required
 def products_admin():
+    
     if current_user.is_authenticated:
         tipoUsuario = current_user.admin
         if not tipoUsuario:
@@ -217,6 +220,7 @@ def home_user():
 @app.route('/products_user',methods=['GET','POST'])
 @login_required
 def products_user():
+    global id_product
     if current_user.is_authenticated:
         tipoUsuario = current_user.admin
         if tipoUsuario:
@@ -228,16 +232,22 @@ def products_user():
             accesory = request.form["searchProduct"]
             # lists = listAccesories(accesory)
             lists = Producto.query.filter(Producto.nombre.contains(accesory)).all()
+            for i in lists:
+                id_product = i.id
+            
             if len(lists) > 0:
                 return render_template('/products_user.html', searchProducts=lists)
             else:
                 lists = Producto.query.all()
                 return render_template('/products_user.html', searchProducts=lists)
+            
 
 
 @app.route('/update_user',methods=['GET','POST'])
 @login_required
 def update_user():
+    global id_product
+    print("id_product= ",id_product)
     if current_user.is_authenticated:
         tipoUsuario = current_user.admin
         if tipoUsuario:
@@ -251,7 +261,8 @@ def update_user():
         return render_template('/home_user.html')
     else:
         if "submit" in request.form:
-            bdd.session.query(Producto).filter(Producto.id==form.idReference.data).update(
+            #bdd.session.query(Producto).filter(Producto.id==form.idReference.data).update(
+            bdd.session.query(Producto).filter(Producto.id==id_product).update(
                 {Producto.cantidad:form.quantity.data}, synchronize_session='evaluate'
             )
             bdd.session.commit()

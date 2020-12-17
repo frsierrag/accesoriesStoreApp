@@ -27,11 +27,16 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        {{ formUpdateInventary.idReference.label(class="mdl-textfield__label") }}
+                                        <!--{{ formUpdateInventary.idReference.label(class="mdl-textfield__label") }}
                                         {{ formUpdateInventary.idReference(class="mdl-textfield__input", value=searchProduct.id) }}
                                         {% for error in formUpdateInventary.idReference.errors %}
                                             <span class="mdl-textfield__error">[{{ error }}]</span>
-                                        {% endfor %}
+                                        {% endfor %}-->
+
+                                        <input class="mdl-textfield__input" type="text" value="{{ searchProduct.id }}"
+                                            pattern="-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?" id="idReference" disabled>
+                                        <label class="mdl-textfield__label" for="idReference">Nombre</label>
+                                        <span class="mdl-textfield__error">Invalido nombre</span>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
