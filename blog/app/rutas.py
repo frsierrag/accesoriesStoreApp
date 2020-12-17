@@ -154,8 +154,9 @@ def products_admin():
                 if pic and allowed_file(pic.filename):
                     pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
                     # createAccesories(formCreate)
-                    accesory = Producto(nombre=formCreate.productName.data, 
-                        image="img/" + formCreate.image.data.filename, cantidad=formCreate.quantity.data)
+                    accesory = Producto(nombre=formCreate.productName.data, precio=formCreate.price.data,
+                        image="img/" + formCreate.image.data.filename, cantidad=formCreate.quantity.data
+                        )
                     bdd.session.add(accesory)
                     bdd.session.commit()
                     return render_template('/home_admin.html')
@@ -270,3 +271,5 @@ def page_not_found(error):
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
