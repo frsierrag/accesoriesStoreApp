@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, url_for
-from app.settings.config import Ajustes, ConexionMail
+from flask import Flask
+from app.settings.config import Ajustes
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager

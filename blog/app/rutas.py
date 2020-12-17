@@ -223,14 +223,15 @@ def products_user():
     if request.method == "GET":
         return render_template('/products_user.html')
     else:
-        accesory = request.form["searchProduct"]
-        # lists = listAccesories(accesory)
-        lists = Producto.query.filter_by(nombre=accesory).all()
-        if len(lists) > 0:
-            return render_template('/products_user.html', searchProducts=lists)
-        else:
-            lists = Producto.query.all()
-            return render_template('/products_user.html', searchProducts=lists)
+        if "searchProduct" in request.form:
+            accesory = request.form["searchProduct"]
+            # lists = listAccesories(accesory)
+            lists = Producto.query.filter(Producto.nombre.contains(accesory)).all()
+            if len(lists) > 0:
+                return render_template('/products_user.html', searchProducts=lists)
+            else:
+                lists = Producto.query.all()
+                return render_template('/products_user.html', searchProducts=lists)
 
 
 @app.route('/update_user',methods=['GET','POST'])
@@ -240,15 +241,20 @@ def update_user():
         tipoUsuario = current_user.admin
         if tipoUsuario:
             return redirect(url_for('home_admin'))
-
     form = FormUpdateInventary()
-    print(request.args["accesory"])
-    product = request.args["accesory"]
-    product = json.loads(product.replace("\'", "\""))
-    if "accesory" in request.args:
-        return render_template('/update_user.html', FormUpdateInventary=form, searchProduct=product)
-    # return render_template('/home_user.html')
-
+    if request.method == "GET":
+        if "accesory" in request.args:
+            product = request.args["accesory"]
+            product = json.loads(product.replace("\'", "\""))
+            return render_template('/update_user.html', formUpdateInventary=form, searchProduct=product)
+        return render_template('/home_user.html')
+    else:
+        if "submit" in request.form:
+            bdd.session.query(Producto).filter(Producto.id==form.idReference.data).update(
+                {Producto.cantidad:form.quantity.data}, synchronize_session='evaluate'
+            )
+            bdd.session.commit()
+        return render_template('/home_user.html')
 
 @app.route('/logout')
 def logout():
