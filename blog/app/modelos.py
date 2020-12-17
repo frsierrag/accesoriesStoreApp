@@ -30,8 +30,7 @@ class Usuario(UserMixin, bdd.Model):
     productos = bdd.relationship(
         'Producto',
         secondary=association_table,
-        backref=bdd.backref(
-            'usuarios', lazy='dynamic'),
+        backref=bdd.backref('usuarios', lazy='dynamic'),
         lazy='dynamic')
 
     def __repr__(self):
@@ -70,8 +69,12 @@ class Producto(bdd.Model):
     def precio_final(self):
         return self.precio+(self.precio)
 
+    # def __repr__(self):
+    #     return (u'<{self.__class__.__name__}: {self.id}>'.format(self=self))
+
     def __repr__(self):
-        return (u'<{self.__class__.__name__}: {self.id}>'.format(self=self))
+        product = {'id':self.id, 'name':self.nombre, 'price':self.precio, 'image':self.image, 'quantity':self.cantidad}
+        return f"{product}"
 
 
 @login.user_loader

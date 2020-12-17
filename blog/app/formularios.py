@@ -33,7 +33,7 @@ class FormCreate(FlaskForm):
     create = SubmitField('+')
 
 class FormUpdate(FlaskForm): 
-    idReference = StringField('Referencia')
+    idReference = StringField('Referencia', render_kw={'disabled':True})
     productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo')])
     quantity = IntegerField('Cantidad', validators=[DataRequired(message='Se requiere que completes este campo')])
     price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo')])

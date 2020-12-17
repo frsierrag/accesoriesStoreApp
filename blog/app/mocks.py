@@ -37,8 +37,9 @@ def listAccesories(name):
     if len(productSearch) > 0:
         print('Product: ' + ''.join(str(e) for e in productSearch))
         print('LISTADO DE ACCESORIOS EXITOSO')
+        print(type(productSearch))
         return productSearch
-    return ""
+    return
 
 
 def updateAccesories(form):
