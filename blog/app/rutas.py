@@ -140,7 +140,7 @@ def products_admin():
         if "searchProduct" in request.form:
             accesory = request.form["searchProduct"]
             # lists = listAccesories(accesory)
-            lists = Producto.query.filter_by(nombre=accesory).all()
+            lists = Producto.query.filter(Producto.nombre.contains(accesory)).all()
             if len(lists) > 0:
                 return render_template('/products_admin.html', searchProducts=lists, stateSearch='is-active', 
                     stateCreate='', formCreate=formCreate)
