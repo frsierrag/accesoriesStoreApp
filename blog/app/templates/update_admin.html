@@ -28,7 +28,7 @@
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         {{ formUpdate.idReference.label(class="mdl-textfield__label") }}
-                                        {{ formUpdate.idReference(class="mdl-textfield__input", value=searchProduct.id, disabled=True) }}
+                                        {{ formUpdate.idReference(class="mdl-textfield__input", value=searchProduct.id) }}
                                         {% for error in formUpdate.idReference.errors %}
                                             <span class="mdl-textfield__error">[{{ error }}]</span>
                                         {% endfor %}

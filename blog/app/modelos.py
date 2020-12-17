@@ -8,10 +8,6 @@ from werkzeug.security import check_password_hash as checkph
 from flask_login import UserMixin
 
 
-#usuario = bdd.relationship('Usuario', backref='autor', lazy='dynamic')
-#id_admin = bdd.Column(bdd.Integer, bdd.ForeignKey('administrador.id'))
-
-
 association_table = bdd.Table(
     'association', bdd.Model.metadata,
     bdd.Column('users_id', bdd.Integer, bdd.ForeignKey(
@@ -30,8 +26,7 @@ class Usuario(UserMixin, bdd.Model):
     productos = bdd.relationship(
         'Producto',
         secondary=association_table,
-        backref=bdd.backref(
-            'usuarios', lazy='dynamic'),
+        backref=bdd.backref('usuarios', lazy='dynamic'),
         lazy='dynamic')
 
     def __repr__(self):
@@ -71,7 +66,11 @@ class Producto(bdd.Model):
         return self.precio+(self.precio)
 
     def __repr__(self):
-        return (u'<{self.__class__.__name__}: {self.id}>'.format(self=self))
+        product = {'id':self.id, 'name':self.nombre, 'price':self.precio, 'image':self.image, 'quantity':self.cantidad}
+        return f"{product}"
+
+    # def __repr__(self):
+    #     return (u'<{self.__class__.__name__}: {self.id}>'.format(self=self))
 
 
 @login.user_loader

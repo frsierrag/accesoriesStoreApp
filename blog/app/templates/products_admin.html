@@ -134,8 +134,8 @@
                                     <img src="static/{{ searchProducts[loop.index-1].image}}" alt="product" class="img-responsive">
                                 </div>
                                 <div class="mdl-card__actions mdl-card--border">
-                                    Accesorio: {{ searchProducts[loop.index-1].name }} <br>
-                                    Cantidad: {{ searchProducts[loop.index-1].quantity }} <br>
+                                    Accesorio: {{ product.nombre }} <br>
+                                    Cantidad: {{ product.cantidad }} <br>
                                     <div class="row">
                                         <div class="col-md mdl-card__actions">
                                             <a href="{{ url_for('update_admin', accesory=product) }}" name="Update" class="btn btn-success btn-block">Actualizar</a>

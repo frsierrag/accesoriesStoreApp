@@ -1,13 +1,12 @@
-import json, os
+import os, json
 from app import app, bdd
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from app.formularios import FormLogin, FormRecoverPass, FormChangePass, FormRegister, FormCreate, FormUpdate, FormDelete, FormSearch, FormUpdateInventary
 from app.mocks import listAccesories, createAccesories, updateAccesories, deleteAccesory
 from app.modelos import Usuario, Producto
 from app.enviar_email import contraseña_olvidada, envio_credenciales
 from werkzeug.urls import url_parse
-from werkzeug.utils import secure_filename
 
 
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -65,7 +64,6 @@ def recover_password():
     form = FormRecoverPass()
     if form.validate_on_submit():
         usuario = Usuario.query.filter_by(email=form.email.data).first()
-        #usuarios = Usuario.query.all()
         if usuario is None:
             flash('No existe ningún usuario con este correo electrónico en nuestros registros')
             form.email.data = ""
@@ -141,19 +139,25 @@ def products_admin():
     else:
         if "searchProduct" in request.form:
             accesory = request.form["searchProduct"]
-            lists = listAccesories(accesory)
+            # lists = listAccesories(accesory)
+            lists = Producto.query.filter(Producto.nombre.contains(accesory)).all()
             if len(lists) > 0:
                 return render_template('/products_admin.html', searchProducts=lists, stateSearch='is-active', 
                     stateCreate='', formCreate=formCreate)
             else:
-                return render_template('/products_admin.html', stateCreate='', stateSearch='is-active', 
-                    formCreate=formCreate, formSearch=formSearch)
+                lists = Producto.query.all()
+                return render_template('/products_admin.html', searchProducts=lists, stateCreate='', 
+                    stateSearch='is-active', formCreate=formCreate, formSearch=formSearch)
         if "image" in request.files:
             pic = request.files['image']
             while pic:
                 if pic and allowed_file(pic.filename):
                     pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
-                    createAccesories(formCreate)
+                    # createAccesories(formCreate)
+                    accesory = Producto(nombre=formCreate.productName.data, 
+                        image="img/" + formCreate.image.data.filename, cantidad=formCreate.quantity.data)
+                    bdd.session.add(accesory)
+                    bdd.session.commit()
                     return render_template('/home_admin.html')
                 else: formCreate.image.errors.append('Extensión de imágen incorrecta')
         return render_template('/products_admin.html', formCreate=formCreate, formSearch=formSearch, 
@@ -176,7 +180,9 @@ def update_admin():
             return render_template('/update_admin.html', formUpdate=formUpdate, searchProduct=product)
         if "idProduct" in request.args:
             idProduct = request.args["idProduct"]
-            deleteAccesory(idProduct)
+            # deleteAccesory(idProduct)
+            bdd.session.query(Producto).filter(Producto.id==idProduct).delete(synchronize_session='evaluate')
+            bdd.session.commit()
             return render_template('/home_admin.html')
     else:
         if "image" in request.files:
@@ -184,7 +190,14 @@ def update_admin():
             while pic:
                 if pic and allowed_file(pic.filename):
                     pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
-                    updateAccesories(formUpdate)
+                    # updateAccesories(formUpdate)
+                    print(formUpdate.idReference)
+                    print(formUpdate.productName.data)
+                    bdd.session.query(Producto).filter(Producto.id==formUpdate.idReference.data).update(
+                        {Producto.nombre:formUpdate.productName.data, Producto.image:"img/"+formUpdate.image.data.filename, 
+                        Producto.cantidad:formUpdate.quantity.data}, synchronize_session='evaluate'
+                    )
+                    bdd.session.commit()
                     return render_template('/home_admin.html', formUpdate=formUpdate)
                 else: formUpdate.image.errors.append('Extensión de imágen incorrecta')
         return render_template('/update_admin.html')
@@ -211,11 +224,13 @@ def products_user():
         return render_template('/products_user.html')
     else:
         accesory = request.form["searchProduct"]
-        lists = listAccesories(accesory)
-        if lists != "1":
+        # lists = listAccesories(accesory)
+        lists = Producto.query.filter_by(nombre=accesory).all()
+        if len(lists) > 0:
             return render_template('/products_user.html', searchProducts=lists)
         else:
-            return render_template('/products_user.html')
+            lists = Producto.query.all()
+            return render_template('/products_user.html', searchProducts=lists)
 
 
 @app.route('/update_user',methods=['GET','POST'])
