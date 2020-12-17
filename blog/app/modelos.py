@@ -1,6 +1,5 @@
 import jwt
 from app import bdd, login
-from datetime import datetime
 from time import time
 from app import app
 from werkzeug.security import generate_password_hash as genph

@@ -49,6 +49,7 @@ class FormSearch(FlaskForm):
     search = SubmitField('Buscar')
 
 class FormUpdateInventary(FlaskForm):
+    idReference = StringField('Referencia')
     quantity = StringField('Cantidad', validators=[DataRequired(message='Se requiere que completes este campo'), 
         Regexp('/^[A-Za-z]+$/g', message='Cantidad invalida')])
-    submit = SubmitField('Actualizar')
+    submit = SubmitField('+')
