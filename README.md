@@ -37,6 +37,6 @@ pip install Flask-JWT
 pip install Flask-Migrate
 
 # INFO
-frsierrag@gmailcom
+frsierrag@gmail.com
 fabiansierra@uninorte.edu.co
 silviamm@uninorte.edu.co
