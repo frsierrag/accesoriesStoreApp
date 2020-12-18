@@ -9,8 +9,6 @@ from app.enviar_email import contraseña_olvidada, envio_credenciales
 from werkzeug.urls import url_parse
 
 
-id_product = 0
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -157,8 +155,7 @@ def products_admin():
                     pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
                     # createAccesories(formCreate)
                     accesory = Producto(nombre=formCreate.productName.data, precio=formCreate.price.data,
-                        image="img/" + formCreate.image.data.filename, cantidad=formCreate.quantity.data
-                        )
+                        image="img/" + formCreate.image.data.filename, cantidad=formCreate.quantity.data)
                     bdd.session.add(accesory)
                     bdd.session.commit()
                     return render_template('/home_admin.html')
@@ -194,11 +191,10 @@ def update_admin():
                 if pic and allowed_file(pic.filename):
                     pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
                     # updateAccesories(formUpdate)
-                    print(formUpdate.idReference)
-                    print(formUpdate.productName.data)
                     bdd.session.query(Producto).filter(Producto.id==formUpdate.idReference.data).update(
                         {Producto.nombre:formUpdate.productName.data, Producto.image:"img/"+formUpdate.image.data.filename, 
-                        Producto.cantidad:formUpdate.quantity.data}, synchronize_session='evaluate'
+                        Producto.cantidad:formUpdate.quantity.data, Producto.precio:formUpdate.price.data}, 
+                        synchronize_session='evaluate'
                     )
                     bdd.session.commit()
                     return render_template('/home_admin.html', formUpdate=formUpdate)
@@ -245,8 +241,6 @@ def products_user():
 @app.route('/update_user',methods=['GET','POST'])
 @login_required
 def update_user():
-    global id_product
-    print("id_product= ",id_product)
     if current_user.is_authenticated:
         tipoUsuario = current_user.admin
         if tipoUsuario:
@@ -260,8 +254,7 @@ def update_user():
         return render_template('/home_user.html')
     else:
         if "submit" in request.form:
-            #bdd.session.query(Producto).filter(Producto.id==form.idReference.data).update(
-            bdd.session.query(Producto).filter(Producto.id==id_product).update(
+            bdd.session.query(Producto).filter(Producto.id==form.idReference.data).update(
                 {Producto.cantidad:form.quantity.data}, synchronize_session='evaluate'
             )
             bdd.session.commit()
