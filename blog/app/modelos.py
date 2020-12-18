@@ -1,23 +1,18 @@
+import jwt
 from app import bdd, login
-from datetime import datetime
 from time import time
 from app import app
-import jwt
 from werkzeug.security import generate_password_hash as genph
 from werkzeug.security import check_password_hash as checkph
 from flask_login import UserMixin
 
 
-#usuario = bdd.relationship('Usuario', backref='autor', lazy='dynamic')
-#id_admin = bdd.Column(bdd.Integer, bdd.ForeignKey('administrador.id'))
-
-
-association_table = bdd.Table('association', bdd.Model.metadata,
-                              bdd.Column('users_id', bdd.Integer, bdd.ForeignKey(
-                                  'users.id'), primary_key=True),
-                              bdd.Column('products_id', bdd.Integer, bdd.ForeignKey(
-                                  'products.id'), primary_key=True)
-                              )
+association_table = bdd.Table(
+    'association', bdd.Model.metadata,
+    bdd.Column('users_id', bdd.Integer, bdd.ForeignKey(
+        'users.id'), primary_key=True),
+    bdd.Column('products_id', bdd.Integer, bdd.ForeignKey(
+        'products.id'), primary_key=True))
 
 
 class Usuario(UserMixin, bdd.Model):
@@ -27,15 +22,14 @@ class Usuario(UserMixin, bdd.Model):
     email = bdd.Column(bdd.String(120), index=True, unique=True)
     hash_clave = bdd.Column(bdd.String(128))
     admin = bdd.Column(bdd.Boolean, default=False)
-    productos = bdd.relationship('Producto',
-                                 secondary=association_table,
-                                 backref=bdd.backref(
-                                     'usuarios', lazy='dynamic'),
-                                 lazy='dynamic')
+    productos = bdd.relationship(
+        'Producto',
+        secondary=association_table,
+        backref=bdd.backref('usuarios', lazy='dynamic'),
+        lazy='dynamic')
 
     def __repr__(self):
-        return '<Usuario {}>'.format(self.username)
-        
+        return '<Usuario {}>'.format(self.username)        
 
     def def_clave(self, clave):
         self.hash_clave = genph(clave)
@@ -51,8 +45,9 @@ class Usuario(UserMixin, bdd.Model):
     @staticmethod
     def verificar_token_contraseña(token):
         try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
-                            algorithms=['HS256'])['recuperar_contraseña']
+            id = jwt.decode(
+                token, app.config['SECRET_KEY'],
+                algorithms=['HS256'])['recuperar_contraseña']
         except:
             return
         return Usuario.query.get(id)
@@ -70,7 +65,11 @@ class Producto(bdd.Model):
         return self.precio+(self.precio)
 
     def __repr__(self):
-        return (u'<{self.__class__.__name__}: {self.id}>'.format(self=self))
+        product = {'id':self.id, 'name':self.nombre, 'price':self.precio, 'image':self.image, 'quantity':self.cantidad}
+        return f"{product}"
+
+    # def __repr__(self):
+    #     return (u'<{self.__class__.__name__}: {self.id}>'.format(self=self))
 
 
 @login.user_loader

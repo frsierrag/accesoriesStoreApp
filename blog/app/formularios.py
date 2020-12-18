@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.fields.core import FloatField, IntegerField
-from wtforms.fields.simple import FileField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import DataRequired, EqualTo, Length, Regexp
 
 class FormLogin(FlaskForm):
@@ -12,7 +12,7 @@ class FormLogin(FlaskForm):
 
 class FormRecoverPass(FlaskForm):
     email = StringField('Email', validators=[DataRequired(message='Este campo es requerido')])
-    submit = SubmitField('Recuperar contraseña')
+    submit = SubmitField('Enviar')
 
 class FormChangePass(FlaskForm):
     newPassword = PasswordField('Nueva Contraseña', validators=[DataRequired(message='Se requiere que completes este campo')])
@@ -27,21 +27,21 @@ class FormRegister(FlaskForm):
 
 class FormCreate(FlaskForm):
     productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[A-Za-z0-9áéíóúÁÉÍÓÚ ]*(\.[0-9]+)?$')])
-    quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
+    quantity = IntegerField('Cantidad', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
     price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo'), Regexp('^-?[0-9]*(\.[0-9]+)?$')])
-    image = FileField('File', validators=[DataRequired(message='Se requiere que completes este campo')])
+    image = FileField('selecciona imagen:', validators=[FileRequired(message='Requerido'), FileAllowed(['jpg', 'png'], 'Images only!')])
     create = SubmitField('+')
 
 class FormUpdate(FlaskForm): 
+    idReference = StringField('Referencia')
     productName = StringField('Nombre', validators=[DataRequired(message='Se requiere que completes este campo')])
-    quantity = IntegerField('Capacidad', validators=[DataRequired(message='Se requiere que completes este campo')])
+    quantity = IntegerField('Cantidad', validators=[DataRequired(message='Se requiere que completes este campo')])
     price = FloatField('Precio', validators=[DataRequired(message='Se requiere que completes este campo')])
-    image = FileField('File', validators=[DataRequired(message='Se requiere que completes este campo')])
-    # image = FileField(u'Image File', [validators.regexp(u'^[^/\\]\.jpg$')])
-    submit = SubmitField('Actualizar')
+    image = FileField('selecciona imagen:', validators=[FileRequired(), FileAllowed(['jpg', 'png'], message='Images only!')])
+    submit = SubmitField('+')
 
 class FormDelete(FlaskForm):
-    reference = StringField()
+    idReference = StringField('Eliminar', validators=[DataRequired(message='Se requiere que completes este campo')])
     submit = SubmitField('Eliminar')
 
 class FormSearch(FlaskForm):
@@ -49,6 +49,7 @@ class FormSearch(FlaskForm):
     search = SubmitField('Buscar')
 
 class FormUpdateInventary(FlaskForm):
+    idReference = StringField('Referencia')
     quantity = StringField('Cantidad', validators=[DataRequired(message='Se requiere que completes este campo'), 
         Regexp('/^[A-Za-z]+$/g', message='Cantidad invalida')])
-    submit = SubmitField('Actualizar')
+    submit = SubmitField('+')

@@ -19,7 +19,7 @@
                         Actualizar producto
                     </div>
                     <div class="full-width panel-content">
-                        <form action="/home_user">
+                        <form method="POST" enctype="multipart/form-data">
                             <div class="mdl-grid">
                                 <div class="mdl-cell mdl-cell--12-col">
                                     <legend class="text-condensedLight"><i class="zmdi zmdi-border-color"></i> &nbsp;
@@ -27,10 +27,11 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        <input class="mdl-textfield__input" type="text" value="{{ searchProduct.id }}"
-                                            id="BarCode" disabled>
-                                        <label class="mdl-textfield__label" for="BarCode">Referencia</label>
-                                        <span class="mdl-textfield__error">Invalida referencia</span>
+                                        {{ formUpdateInventary.idReference.label(class="mdl-textfield__label") }}
+                                        {{ formUpdateInventary.idReference(class="mdl-textfield__input", value=searchProduct.id) }}
+                                        {% for error in formUpdateInventary.idReference.errors %}
+                                            <span class="mdl-textfield__error">[{{ error }}]</span>
+                                        {% endfor %}
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
@@ -43,10 +44,10 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                        {{ form.quantity.label(class="mdl-textfield__label") }}
-                                        {{ form.quantity(class="mdl-textfield__input", value=searchProduct.quantity, 
+                                        {{ formUpdateInventary.quantity.label(class="mdl-textfield__label") }}
+                                        {{ formUpdateInventary.quantity(class="mdl-textfield__input", value=searchProduct.quantity, 
                                             pattern='^[0-9]+$', title='Cantidad invalida') }}
-                                        {% for error in form.quantity.errors %}
+                                        {% for error in formUpdateInventary.quantity.errors %}
                                             <span class="mdl-textfield__error">[{{ error }}]</span>
                                         {% endfor %}
                                     </div>
@@ -54,18 +55,15 @@
                                 <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                                         <input class="mdl-textfield__input" type="text" pattern="-?[0-9.]*(\.[0-9]+)?"
-                                            id="PriceProduct" disabled>
+                                            id="PriceProduct" value="{{ searchProduct.price }}" disabled>
                                         <label class="mdl-textfield__label" for="PriceProduct">Precio</label>
                                         <span class="mdl-textfield__error">Invalido precio</span>
                                     </div>
                                 </div>
                             </div>
                             <p class="text-center">
-                                <button
-                                    class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary"
-                                    id="btn-addProduct">
-                                    <i class="zmdi zmdi-plus"></i>
-                                </button>
+                                {{ formUpdateInventary.submit(class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored bg-primary", 
+                                    id="btn-addProduct") }}
                             <div class="mdl-tooltip" for="btn-addProduct">Actualizar producto</div>
                             </p>
                         </form>

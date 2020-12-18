@@ -19,7 +19,7 @@
     <div class="mdl-tabs__panel" id="tabListProducts">
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--4-col-phone mdl-cell--8-col-tablet mdl-cell--12-col-desktop">
-                <form action="" method="POST">
+                <form action="#" method="POST" enctype="multipart/form-data">
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
                         <label class="mdl-button mdl-js-button mdl-button--icon" for="searchProduct">
                             <i class="zmdi zmdi-search"></i>
@@ -31,15 +31,15 @@
                     </div>
                 </form>
                 <div class="full-width text-center" style="padding: 30px 0;">
-                    {% if searchProducts -%}
+                    {% if searchProducts %}
                         {% for product in searchProducts %}
                             <div class="mdl-card mdl-shadow--2dp full-width product-card">
                                 <div class="mdl-card__title">
                                     <img src="static/{{ searchProducts[loop.index-1].image}}" alt="product" class="img-responsive">
                                 </div>
                                 <div class="mdl-card__actions mdl-card--border">
-                                    Accesorio: {{ searchProducts[loop.index-1].name }} <br>
-                                    Cantidad: {{ searchProducts[loop.index-1].quantity }}
+                                    Accesorio: {{ product.nombre }} <br>
+                                    Cantidad: {{ product.cantidad }} <br>
                                 </div>
                                 <a href="{{url_for('update_user', accesory=product)}}" class="btn btn-success btn-block">Actualizar</a>
                             </div>

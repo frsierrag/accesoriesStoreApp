@@ -1,17 +1,12 @@
-import json
+import os, json
 from app import app, bdd
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import login_manager, login_user, logout_user, login_required, current_user
+from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask_login import login_user, logout_user, login_required, current_user
 from app.formularios import FormLogin, FormRecoverPass, FormChangePass, FormRegister, FormCreate, FormUpdate, FormDelete, FormSearch, FormUpdateInventary
-from app.mocks import userValidate, listAccesories
+from app.mocks import listAccesories, createAccesories, updateAccesories, deleteAccesory
 from app.modelos import Usuario, Producto
-from app.enviar_email import contraseña_olvidada
+from app.enviar_email import contraseña_olvidada, envio_credenciales
 from werkzeug.urls import url_parse
-
-
-UPLOAD_FOLDER = '/StoreApp/accesoriesStoreApp/blog/app/static/img'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route('/')
@@ -22,10 +17,10 @@ def index():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-    #     user = userValidate(request.form["userName"], request.form["password"])
+    # user = userValidate(request.form["userName"], request.form["password"])
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if TipoUsuario:
+        tipoUsuario = current_user.admin
+        if tipoUsuario:
             return redirect(url_for('home_admin'))
         else:
             return redirect(url_for('home_user'))
@@ -34,6 +29,7 @@ def login():
         usuario = Usuario.query.filter_by(username=form.userName.data).first()
         administrador = Usuario.query.filter_by(username=form.userName.data).filter_by(admin=1).all()
         if usuario and not administrador:
+            # si es usuario ingresa esta condicion
             if usuario.verif_clave(form.password.data):
                 login_user(usuario, remember=form.remember.data)
                 next_page = request.args.get('next')
@@ -43,6 +39,7 @@ def login():
             else:
                 form.password.errors.append("Contraseña incorrecta")
         elif usuario and administrador:
+            # si es administrador ingresa esta condicion
             if usuario.verif_clave(form.password.data):
                 login_user(usuario, remember=form.remember.data)
                 next_page = request.args.get('next')
@@ -58,15 +55,14 @@ def login():
 @app.route('/recover_password', methods=['GET', 'POST'])
 def recover_password():
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if TipoUsuario:
+        tipoUsuario = current_user.admin
+        if tipoUsuario:
             return redirect(url_for('home_admin'))
         else:
             return redirect(url_for('home_user'))
     form = FormRecoverPass()
     if form.validate_on_submit():
         usuario = Usuario.query.filter_by(email=form.email.data).first()
-        #usuarios = Usuario.query.all()
         if usuario is None:
             flash('No existe ningún usuario con este correo electrónico en nuestros registros')
             form.email.data = ""
@@ -81,8 +77,8 @@ def recover_password():
 @app.route('/change_pass/<token>', methods= ['GET', 'POST'])
 def change_pass(token):
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if TipoUsuario:
+        tipoUsuario = current_user.admin
+        if tipoUsuario:
             return redirect(url_for('home_admin'))
         else:
             return redirect(url_for('home_user'))
@@ -102,8 +98,8 @@ def change_pass(token):
 @login_required
 def home_admin():
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if not TipoUsuario:
+        tipoUsuario = current_user.admin
+        if not tipoUsuario:
             return redirect(url_for('home_user'))        
     return render_template('/home_admin.html')
 
@@ -112,8 +108,8 @@ def home_admin():
 @login_required
 def admin_register():
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if not TipoUsuario:
+        tipoUsuario = current_user.admin
+        if not tipoUsuario:
             return redirect(url_for('home_user'))
     form = FormRegister()
     if form.validate_on_submit():
@@ -122,6 +118,7 @@ def admin_register():
         bdd.session.add(usuario)
         bdd.session.commit()
         flash('Usuario registrado correctamente')
+        envio_credenciales(form.userName.data, form.password.data, form.email.data)
         return redirect(url_for('home_admin'))
     return render_template('admin_register.html', form=form)
 
@@ -129,9 +126,10 @@ def admin_register():
 @app.route('/products_admin',methods=['GET','POST'])
 @login_required
 def products_admin():
+    
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if not TipoUsuario:
+        tipoUsuario = current_user.admin
+        if not tipoUsuario:
             return redirect(url_for('home_user'))
     formCreate = FormCreate()
     formSearch = FormSearch()
@@ -141,51 +139,75 @@ def products_admin():
     else:
         if "searchProduct" in request.form:
             accesory = request.form["searchProduct"]
-            lists = listAccesories(accesory)
-            if lists != "1":
+            # lists = listAccesories(accesory)
+            lists = Producto.query.filter(Producto.nombre.contains(accesory)).all()
+            if len(lists) > 0:
                 return render_template('/products_admin.html', searchProducts=lists, stateSearch='is-active', 
                     stateCreate='', formCreate=formCreate)
             else:
-                return render_template('/products_admin.html')
-        elif "create" in request.form:
-            file = request.files['file']
-            # if file and allowed_file(file.filename):
-            #     filename = secure_filename(file.filename)
-            #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            #     return redirect(url_for('uploaded_file', filename=filename))
-            return render_template('/products_admin.html', formCreate=formCreate)
+                lists = Producto.query.all()
+                return render_template('/products_admin.html', searchProducts=lists, stateCreate='', 
+                    stateSearch='is-active', formCreate=formCreate, formSearch=formSearch)
+        if "image" in request.files:
+            pic = request.files['image']
+            while pic:
+                if pic and allowed_file(pic.filename):
+                    pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
+                    # createAccesories(formCreate)
+                    accesory = Producto(nombre=formCreate.productName.data, precio=formCreate.price.data,
+                        image="img/" + formCreate.image.data.filename, cantidad=formCreate.quantity.data)
+                    bdd.session.add(accesory)
+                    bdd.session.commit()
+                    return render_template('/home_admin.html')
+                else: formCreate.image.errors.append('Extensión de imágen incorrecta')
         return render_template('/products_admin.html', formCreate=formCreate, formSearch=formSearch, 
-            stateSearch='', stateCreate='is-active',)
+            stateSearch='', stateCreate='is-active')
 
 
 @app.route('/update_admin',methods=['GET','POST','DELETE'])
 @login_required
 def update_admin():
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if not TipoUsuario:
+        tipoUsuario = current_user.admin
+        if not tipoUsuario:
             return redirect(url_for('home_user'))
     formUpdate = FormUpdate()
     formDelete = FormDelete()
     if request.method == "GET":
-        product = request.args["accesory"]
-        product = json.loads(product.replace("\'", "\""))
         if "accesory" in request.args:
+            product = request.args["accesory"]
+            product = json.loads(product.replace("\'", "\""))
             return render_template('/update_admin.html', formUpdate=formUpdate, searchProduct=product)
-    elif request.method == "POST":
-        if formUpdate.validate_on_submit():
-            return render_template('/home_user.html')
-        return render_template('/update_admin.html', formUpdate=formUpdate)
-    elif request.method == "DELETE":
-        return render_template('/update_admin.html', formDelete=formDelete)
+        if "idProduct" in request.args:
+            idProduct = request.args["idProduct"]
+            # deleteAccesory(idProduct)
+            bdd.session.query(Producto).filter(Producto.id==idProduct).delete(synchronize_session='evaluate')
+            bdd.session.commit()
+            return render_template('/home_admin.html')
+    else:
+        if "image" in request.files:
+            pic = request.files['image']
+            while pic:
+                if pic and allowed_file(pic.filename):
+                    pic.save(os.path.join(app.config['UPLOAD_FOLDER'], pic.filename))
+                    # updateAccesories(formUpdate)
+                    bdd.session.query(Producto).filter(Producto.id==formUpdate.idReference.data).update(
+                        {Producto.nombre:formUpdate.productName.data, Producto.image:"img/"+formUpdate.image.data.filename, 
+                        Producto.cantidad:formUpdate.quantity.data, Producto.precio:formUpdate.price.data}, 
+                        synchronize_session='evaluate'
+                    )
+                    bdd.session.commit()
+                    return render_template('/home_admin.html', formUpdate=formUpdate)
+                else: formUpdate.image.errors.append('Extensión de imágen incorrecta')
+        return render_template('/update_admin.html')
 
 
 @app.route('/home_user')
 @login_required
 def home_user():
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if TipoUsuario:
+        tipoUsuario = current_user.admin
+        if tipoUsuario:
             return redirect(url_for('home_admin'))        
     return render_template('/home_user.html')
 
@@ -193,39 +215,50 @@ def home_user():
 @app.route('/products_user',methods=['GET','POST'])
 @login_required
 def products_user():
+    global id_product
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if TipoUsuario:
+        tipoUsuario = current_user.admin
+        if tipoUsuario:
             return redirect(url_for('home_admin'))
     if request.method == "GET":
         return render_template('/products_user.html')
     else:
-        accesory = request.form["searchProduct"]
-        lists = listAccesories(accesory)
-        if lists != "1":
-            return render_template('/products_user.html', searchProducts=lists)
-        else:
-            return render_template('/products_user.html')
+        if "searchProduct" in request.form:
+            accesory = request.form["searchProduct"]
+            # lists = listAccesories(accesory)
+            lists = Producto.query.filter(Producto.nombre.contains(accesory)).all()
+            for i in lists:
+                id_product = i.id
+            
+            if len(lists) > 0:
+                return render_template('/products_user.html', searchProducts=lists)
+            else:
+                lists = Producto.query.all()
+                return render_template('/products_user.html', searchProducts=lists)
+            
 
 
 @app.route('/update_user',methods=['GET','POST'])
 @login_required
 def update_user():
     if current_user.is_authenticated:
-        TipoUsuario = current_user.admin
-        if TipoUsuario:
+        tipoUsuario = current_user.admin
+        if tipoUsuario:
             return redirect(url_for('home_admin'))
-    formUpdateInventary = FormUpdateInventary()
+    form = FormUpdateInventary()
     if request.method == "GET":
-        product = request.args["accesory"]
-        product = json.loads(product.replace("\'", "\""))
         if "accesory" in request.args:
-            return render_template('/update_user.html', form=formUpdateInventary, searchProduct=product)
+            product = request.args["accesory"]
+            product = json.loads(product.replace("\'", "\""))
+            return render_template('/update_user.html', formUpdateInventary=form, searchProduct=product)
+        return render_template('/home_user.html')
     else:
-        if formUpdateInventary.validate_on_submit():
-            return render_template('/home_user.html', form=formUpdateInventary)
-        return render_template('/update_user.html', form=formUpdateInventary)
-
+        if "submit" in request.form:
+            bdd.session.query(Producto).filter(Producto.id==form.idReference.data).update(
+                {Producto.cantidad:form.quantity.data}, synchronize_session='evaluate'
+            )
+            bdd.session.commit()
+        return render_template('/home_user.html')
 
 @app.route('/logout')
 def logout():
@@ -233,6 +266,13 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.errorhandler(404)
+def page_not_found(error):
+	return render_template("error.html", error="Página no encontrada..."), 404
+
+
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+

@@ -51,7 +51,8 @@
 										<div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
 											<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 												{{ form.password.label(class="mdl-textfield__label") }}
-												{{ form.password(class="mdl-textfield__input")}}
+												{{ form.password(class="mdl-textfield__input", 
+												pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!#%*?&ñ.,/()'])[A-Za-z\d$@$!#%*?&ñ.,/()']{8,15}")}}
 												{% for error in form.password.errors %}
 													<span class="mdl-textfield__error">[{{ error }}]</span>
 												{% endfor %}
