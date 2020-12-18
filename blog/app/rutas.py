@@ -9,7 +9,7 @@ from app.enviar_email import contraseña_olvidada, envio_credenciales
 from werkzeug.urls import url_parse
 
 
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+# app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 
 @app.route('/')
