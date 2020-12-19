@@ -4,7 +4,7 @@
 App made to adminitrate a accesories store from its products to users that can create, update, list and delete elements to the store.
 
 # DESCRIPCIÓN
-Aplicación desarrollada (en Flask-Python como back-end y HTML, CSS y jQuery para el front-end) para administrar elementos de una tienda por catalogo en la cual se pueden crear, mostrar, acatualizar y borrar accesorios. Adicionalmente la aplicación cuenta con un sistema de registro de usuarios a la cabeza de una cuenta de Administrador.
+Aplicación desarrollada (en Python-Flask como back-end y HTML, CSS y jQuery para el front-end) para administrar elementos de una tienda por catalogo en la cual se pueden crear, mostrar, acatualizar y borrar accesorios. Adicionalmente la aplicación cuenta con un sistema de registro de usuarios a la cabeza de una cuenta de Administrador.
 
 # SERVICIOS
 1. Login: (GET/POST) Servicio de autenticación de usuario la cual compara la entrada con la información almacenada en base de datos.
@@ -31,10 +31,22 @@ Descarga este repositorio a través de: https://github.com/frsierrag/accesoriesS
 # INDEX
 https://localhost:443/index
 
-# INSTALACIONES
+# INSTALACIONES WINDOWS
+pip install Flask
+pip install Flask-wtf
 pip install Flask-SQLAlchemy
-pip install Flask-JWT
 pip install Flask-Migrate
+pip install Flask-login
+pip install Flask-JWT
+
+# INSTALACIONES LINUX
+sudo apt-get install python3-pip
+sudo pip3 install flask
+sudo pip3 install flask-wtf
+sudo pip3 install flask-sqlalchemy
+sudo pip3 install flask-migrate
+sudo pip3 install flask-login
+sudo pip3 install pyjwt
 
 # INFO
 frsierrag@gmail.com

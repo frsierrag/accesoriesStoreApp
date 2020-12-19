@@ -1,6 +1,6 @@
 Querido {{ usuario.username }},
-Para recuperar tu contraseña haz click en el siguiente enlace:
+Para recuperar su contraseña haz click en el siguiente enlace:
 {{ url_for('change_pass', token=token, _external=True) }}
-Si no has sido tú el que solicitó la recuperación de contraseña por favor ignore este mensaje.
+Si ud no ha solicitado la recuperación de contraseña por favor ignore este mensaje.
 Sinceramente,
 Soporte Inventario
