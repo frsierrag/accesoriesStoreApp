@@ -1,7 +1,7 @@
 # TIENDA DE ACCESORIOS - accesoriesStoreApp
 
 # SUMMARY
-App made to adminitrate a accesories store from its products to users that can create, update, list and delete elements to the store.
+App developed (in Python-Flask like back-edn and HTML, CSS and jQuery like front-end) to manage items in a catalog store, where it's possible creating, showing, updating and deleting accesories. Add this app has an user register system at the head of an Admin user.
 
 # DESCRIPCIÓN
 Aplicación desarrollada (en Python-Flask como back-end y HTML, CSS y jQuery para el front-end) para administrar elementos de una tienda por catalogo en la cual se pueden crear, mostrar, acatualizar y borrar accesorios. Adicionalmente la aplicación cuenta con un sistema de registro de usuarios a la cabeza de una cuenta de Administrador.
@@ -9,7 +9,7 @@ Aplicación desarrollada (en Python-Flask como back-end y HTML, CSS y jQuery par
 # SERVICIOS
 1. Login: (GET/POST) Servicio de autenticación de usuario la cual compara la entrada con la información almacenada en base de datos.
 
-2. Recuerpación de contraseña: (GET/POST) Servicio de recuperación de contraseña para usuarios registrados por medio de el correo electrónico registrado.
+2. Recuperación de contraseña: (GET/POST) Servicio de recuperación de contraseña para usuarios registrados por medio de el correo electrónico registrado.
 
 3. Cambio de contraseña: (GET/POST) Servicio para recibir contraseña, confirmarla y actualizarla en la base de datos.
 
@@ -28,9 +28,6 @@ Aplicación desarrollada (en Python-Flask como back-end y HTML, CSS y jQuery par
 # DESCARGAS
 Descarga este repositorio a través de: https://github.com/frsierrag/accesoriesStoreApp.git
 
-# INDEX
-https://localhost:443/index
-
 # INSTALACIONES WINDOWS
 pip install Flask
 pip install Flask-wtf
@@ -47,6 +44,17 @@ sudo pip3 install flask-sqlalchemy
 sudo pip3 install flask-migrate
 sudo pip3 install flask-login
 sudo pip3 install pyjwt
+
+# EJECUCIÓN
+Desde el ambiente de desarrollo sobre la carpeta \accesoriesStoreApp\blog ejecutar:
+py blog.py 
+https://localhost/index or
+flask run 
+http://localhost:5000/index
+
+Desde el ambiente de producción sobre la carpeta ~/app/App/accesoriesStoreApp/blog$ ejecutar:
+sudo python3 blog.py
+https://ec2-3-82-143-112.compute-1.amazonaws.com/products_admin
 
 # INFO
 frsierrag@gmail.com
