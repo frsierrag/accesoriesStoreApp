@@ -54,7 +54,7 @@ http://localhost:5000/index
 
 Desde el ambiente de producción sobre la carpeta ~/app/App/accesoriesStoreApp/blog$ ejecutar:
 sudo python3 blog.py
-https://ec2-3-82-143-112.compute-1.amazonaws.com/products_admin
+https://ec2-3-91-199-11.compute-1.amazonaws.com/index
 
 # INFO
 frsierrag@gmail.com
